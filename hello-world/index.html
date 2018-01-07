@@ -10,16 +10,69 @@
 
 <body>
     <div id="app">
-        {{ mensagem }}
+        <p v-bind:title='help'>{{ mensagem }}</p>
+        <input type="text" v-model='mensagemDoPai'>
+        <p v-if='happy'>Exibe se happy</p>
+
+        <h3>Lista de frameworks já utilizados</h3>
+        <ul>
+            <li v-for='framework in frameworks'>
+                {{ framework.name }}
+            </li>
+        </ul>
+
+        <button v-on:click='inverteMensagem'>Inverter Mensagem</button>
+        
+        <lorraine-linda v-bind:texto="mensagemDoPai"></lorraine-linda>
+        <h4>{{mensagemDoPai}}</h4>
+
+        <!-- <todo-item
+            v-for="item in frameworksList"
+            v-bind:todo="item"
+            v-bind:key="item.id">
+        </todo-item> -->
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script>
+    // Vue.component('todo-item', {
+    //     props: [todo],
+    //     template: '<li>{{todo.name}}</li>'
+    // })
+    Vue.component('lorraine-linda', {
+        props: ['texto'],
+        template: '<h3>{{ texto }}</h3>'
+    })
+
     let app = new Vue({
         el: '#app',
         data: {
-            mensagem: 'Olá Vue.js'
+            mensagem: 'Olá Vue.js',
+            mensagemDoPai: "I'm your father",
+            help: `Você carregou esta página ${new Date().toLocaleString()}`,
+            happy: true,
+            frameworks: [
+                { name: 'AngularJS' },
+                { name: 'Angular' },
+                { name: 'React' },
+                { name: 'Ember.js' },
+                { name: 'Vue.js' }
+            ],
+            frameworksList: [
+                { id: 0, name: 'AngularJS' },
+                { id: 1, name: 'Angular' },
+                { id: 2, name: 'React' },
+                { id: 3, name: 'Ember.js' },
+                { id: 4, name: 'Vue.js' }
+            ]
+        },
+        methods: {
+            inverteMensagem: function () {
+                this.mensagem = this.mensagem.split('').reverse().join('');
+            }
         }
     })
+
 </script>
+
 </html>
