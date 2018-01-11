@@ -1,6 +1,6 @@
-# mini-ecommerce
+# my-bucher
 
-> A Vue.js project
+> System for controlling your own books in Vue.js
 
 ## Build Setup
 
