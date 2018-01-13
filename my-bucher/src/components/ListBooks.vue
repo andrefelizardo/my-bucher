@@ -6,7 +6,7 @@
       <main class="main">
             <div class="md-row">
                 <md-field md-inline>
-                    <label>Digite o nome ou autor de um livro</label>
+                    <label>nome ou autor</label>
                     <md-input @keyup="searchBooks" v-model.lazy="textSearch"></md-input>
                 </md-field>
             </div>
