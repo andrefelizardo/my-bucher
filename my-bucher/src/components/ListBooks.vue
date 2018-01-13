@@ -94,7 +94,7 @@ export default {
             const books = this.books;
             const allBooks = this.allBooks;
 
-            const newBooks = allBooks.filter((book) => book.title.toLowerCase().indexOf(text) > -1 || book.author.toLowerCase().indexOf(text) > -1)
+            const newBooks = allBooks.filter((book) => book.title.toLowerCase().includes(text) || book.author.toLowerCase().includes(text))
 
             this.books = newBooks;
         }
