@@ -6,8 +6,8 @@
       <main class="main">
             <div class="md-row">
                 <md-field md-inline>
-                    <label>Digite o nome de um livro</label>
-                    <md-input></md-input>
+                    <label>Digite o nome ou autor de um livro</label>
+                    <md-input @keyup="searchBooks" v-model.lazy="textSearch"></md-input>
                 </md-field>
             </div>
             <div class="md-row">
@@ -63,19 +63,53 @@ export default {
                     loan: false,
                     read: false 
                 }
+            ],
+
+            textSearch: '',
+
+            allBooks: [
+                {
+                    title: 'A lei do triunfo',
+                    author: 'Napoleon Hill',
+                    description: 'Mussum Ipsum, cacilds vidis litro abertis. Viva Forevis aptent taciti sociosqu ad litora torquent.',
+                    cover: 'lei-do-triunfo.jpg',
+                    loan: false,
+                    read: false 
+                },
+                {
+                    title: 'A Startup enxuta',
+                    author: 'Eric Ries',
+                    description: 'Como os empreendedores atuais utilizam a inovação contínua para criar empresas extremamente bem-sucedidas.',
+                    cover: 'startup-enxuta.jpg',
+                    loan: false,
+                    read: false 
+                }
             ]
         }
+    },
+
+    methods: {
+        searchBooks: function() {
+            const text = this.textSearch.toLowerCase();
+            const books = this.books;
+            const allBooks = this.allBooks;
+
+            const newBooks = allBooks.filter((book) => book.title.toLowerCase().indexOf(text) > -1 || book.author.toLowerCase().indexOf(text) > -1)
+
+            this.books = newBooks;
+        }
     }
+
 }
 </script>
 
 <style scoped>
-    .md-card-media img {
-        min-height: 400px
-    }
-    .md-card-content {
-        max-height: 80px;
-    }
+.md-card-media img {
+  min-height: 400px;
+}
+.md-card-content {
+  max-height: 80px;
+}
 </style>
 
 
