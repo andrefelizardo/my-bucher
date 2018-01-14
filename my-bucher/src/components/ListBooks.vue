@@ -1,8 +1,5 @@
 <template>
   <div>
-      <md-toolbar>
-          <h3 class="md-title"><md-icon class="menu-icon">menu</md-icon> myBücher - Seus livros em um só lugar</h3>
-      </md-toolbar>
       <main class="main">
             <div class="md-row">
                 <md-field md-inline>
@@ -46,6 +43,7 @@ export default {
 
     data () {
         return {
+
             books: [
                 {
                     title: 'A lei do triunfo',
