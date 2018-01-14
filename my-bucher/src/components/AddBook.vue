@@ -1,9 +1,9 @@
 <template>
     <main class="main">
-        <form novalidate class="md-layout-row md-gutter">
+        <form novalidate class="md-layout-row md-gutter" @submit.prevent="validateBook">
             <md-card class="md-flex-50 md-flex-small-100">
                 <md-card-header>
-                    <div class="md-title">Adicionar livro</div>
+                    <div class="md-title">Preencha os dados do livro</div>
                 </md-card-header>
 
                 <md-card-content>
@@ -11,7 +11,7 @@
                         <div class="md-flex md-flex-small-100">
                             <md-field>
                                 <label for="title">Título</label>
-                                <md-input name="title" id="title" required></md-input>
+                                <md-input name="title" id="title" v-model="form.title" required></md-input>
                                 <span class="md-error">Título é obrigatório</span>
                             </md-field>
                         </div>
@@ -19,7 +19,7 @@
                         <div class="md-flex md-flex-small-100">
                             <md-field>
                                 <label for="author">Autor</label>
-                                <md-input name="author" id="author" required></md-input>
+                                <md-input name="author" id="author" v-model="form.author" required></md-input>
                                 <span class="md-error">Autor é obrigatório</span>
                             </md-field>
                         </div>
@@ -27,14 +27,14 @@
                         <div class="md-flex md-flex-small-100">
                             <md-field>
                                 <label for="description">Descrição</label>
-                                <md-input maxlength="100"></md-input>
+                                <md-input maxlength="100" v-model="form.description"></md-input>
                             </md-field>
                         </div>
 
                         <div class="md-flex md-flex-small-100">
                             <md-field>
                                 <label for="category">Categoria</label>
-                                <md-select name="category" id="category" required>
+                                <md-select name="category" id="category" v-model="form.category" required>
                                     <md-option value="administration">Administração</md-option>
                                     <md-option value="art">Arte</md-option>
                                     <md-option value="self-help">Autoajuda</md-option>
@@ -47,16 +47,16 @@
                         <div class="md-flex md-flex-small-100">
                             <md-field>
                                 <label for="cover">Capa</label>
-                                <md-file accept="image/*"></md-file>
+                                <md-file accept="image/*" v-model="form.cover"></md-file>
                             </md-field>
                         </div>
                     </div>
                 </md-card-content>
 
-                <md-progress-bar md-mode="indeterminate" />
+                <md-progress-bar md-mode="indeterminate" v-if="sending" />
 
                 <md-card-actions>
-                    <md-button type="submit" class="md-primary">Adicionar livro</md-button>
+                    <md-button type="submit" class="md-primary" :disabled="sending || !isValid">Adicionar livro</md-button>
                 </md-card-actions>
 
             </md-card>
@@ -68,7 +68,33 @@
 
 <script>
 export default {
-  
+  data() {
+      return {
+          sending: false,
+
+          form: {
+              title: '',
+              author: '',
+              description: '',
+              category: '',
+              cover: '',
+              loan: false,
+              read: false
+          }
+      }
+  },
+
+  methods: {
+      validateBook: function() {
+
+      }
+  },
+
+  computed: {
+      isValid: function() {
+          return this.form.title != '' && this.form.author != '' && this.form.category != ''
+      }
+  }
 }
 </script>
 
