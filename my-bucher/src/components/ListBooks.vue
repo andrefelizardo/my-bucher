@@ -109,14 +109,3 @@ export default {
   max-height: 80px;
 }
 </style>
-
-
-<style>
-.menu-icon {
-  margin-right: 25px;
-}
-
-.main {
-  margin: 50px 80px 0;
-}
-</style>

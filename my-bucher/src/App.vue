@@ -6,14 +6,14 @@
       </md-toolbar>
       <md-drawer :md-active.sync="showNavigation">
         <md-toolbar class="md-transparent" md-elevation="0">
-          <span class="md-title">myBücher</span>
+          <span class="md-title">O que você quer fazer?</span>
         </md-toolbar>
 
         <md-list>
           <router-link to="/" @click.native="toggleMenu">
             <md-list-item>
               <md-icon>home</md-icon>
-              <span class="md-list-item-text">Livros</span>
+              <span class="md-list-item-text">Lista de livros</span>
             </md-list-item>
           </router-link>
 
@@ -26,7 +26,7 @@
 
           <md-list-item>
             <md-icon>people</md-icon>
-            <span class="md-list-item-text">Amigos</span>
+            <span class="md-list-item-text">Lista de amigos</span>
           </md-list-item>
 
           <md-list-item>
@@ -64,5 +64,11 @@ export default {
 </script>
 
 <style>
+.menu-icon {
+  margin-right: 25px;
+}
 
+.main {
+  margin: 50px 80px 0;
+}
 </style>
