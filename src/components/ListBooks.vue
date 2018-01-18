@@ -13,7 +13,7 @@
                         <md-card>
                             <md-card-media-cover md-solid>
                                 <md-card-media>
-                                    <img :src="`/static/images/${book.cover}`" :alt="book.title">
+                                    <img :src="book.cover" :alt="book.title">
                                 </md-card-media>
 
                                 <md-card-area>
@@ -49,7 +49,7 @@ export default {
                     title: 'A lei do triunfo',
                     author: 'Napoleon Hill',
                     description: 'Mussum Ipsum, cacilds vidis litro abertis. Viva Forevis aptent taciti sociosqu ad litora torquent.',
-                    cover: 'lei-do-triunfo.jpg',
+                    cover: 'https://kbimages1-a.akamaihd.net/1142be7b-d230-4893-9a45-8c178e9f198a/353/569/90/False/a-lei-do-triunfo-1.jpg',
                     loan: false,
                     read: false 
                 },
@@ -57,7 +57,7 @@ export default {
                     title: 'A Startup enxuta',
                     author: 'Eric Ries',
                     description: 'Como os empreendedores atuais utilizam a inovação contínua para criar empresas extremamente bem-sucedidas.',
-                    cover: 'startup-enxuta.jpg',
+                    cover: 'https://images-na.ssl-images-amazon.com/images/I/5166DtCGrEL.jpg',
                     loan: false,
                     read: false 
                 }
@@ -70,7 +70,7 @@ export default {
                     title: 'A lei do triunfo',
                     author: 'Napoleon Hill',
                     description: 'Mussum Ipsum, cacilds vidis litro abertis. Viva Forevis aptent taciti sociosqu ad litora torquent.',
-                    cover: 'lei-do-triunfo.jpg',
+                    cover: 'https://kbimages1-a.akamaihd.net/1142be7b-d230-4893-9a45-8c178e9f198a/353/569/90/False/a-lei-do-triunfo-1.jpg',
                     loan: false,
                     read: false 
                 },
@@ -78,7 +78,7 @@ export default {
                     title: 'A Startup enxuta',
                     author: 'Eric Ries',
                     description: 'Como os empreendedores atuais utilizam a inovação contínua para criar empresas extremamente bem-sucedidas.',
-                    cover: 'startup-enxuta.jpg',
+                    cover: 'https://images-na.ssl-images-amazon.com/images/I/5166DtCGrEL.jpg',
                     loan: false,
                     read: false 
                 }

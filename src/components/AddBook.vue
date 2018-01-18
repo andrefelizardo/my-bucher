@@ -13,6 +13,7 @@
                                 <label for="title">Título</label>
                                 <md-input name="title" id="title" v-model="form.title" required></md-input>
                                 <span class="md-error">Título é obrigatório</span>
+                                <span class="md-error" v-if="form.error">Título do livro deve ter pelo menos 4 caracteres</span>
                             </md-field>
                         </div>
 
@@ -47,7 +48,7 @@
                         <div class="md-flex md-flex-small-100">
                             <md-field>
                                 <label for="cover">Capa</label>
-                                <md-file accept="image/*" v-model="form.cover"></md-file>
+                                <md-input type="url" v-model="form.cover"></md-input>
                             </md-field>
                         </div>
                     </div>
@@ -68,7 +69,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
       return {
           sending: false,
 
@@ -86,13 +87,14 @@ export default {
 
   methods: {
       validateBook: function() {
-
+          if (this.form.title.length < 4)
+            this.title.error = true
       }
   },
 
   computed: {
       isValid: function() {
-          return this.form.title != '' && this.form.author != '' && this.form.category != ''
+          return this.form.title !== '' && this.form.author !== '' && this.form.category !== ''
       }
   }
 }
