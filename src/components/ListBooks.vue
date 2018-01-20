@@ -44,45 +44,9 @@ export default {
     data () {
         return {
 
-            books: [
-                {
-                    title: 'A lei do triunfo',
-                    author: 'Napoleon Hill',
-                    description: 'Mussum Ipsum, cacilds vidis litro abertis. Viva Forevis aptent taciti sociosqu ad litora torquent.',
-                    cover: 'https://kbimages1-a.akamaihd.net/1142be7b-d230-4893-9a45-8c178e9f198a/353/569/90/False/a-lei-do-triunfo-1.jpg',
-                    loan: false,
-                    read: false 
-                },
-                {
-                    title: 'A Startup enxuta',
-                    author: 'Eric Ries',
-                    description: 'Como os empreendedores atuais utilizam a inovação contínua para criar empresas extremamente bem-sucedidas.',
-                    cover: 'https://images-na.ssl-images-amazon.com/images/I/5166DtCGrEL.jpg',
-                    loan: false,
-                    read: false 
-                }
-            ],
+            books: this.$store.state.books,
 
-            textSearch: '',
-
-            allBooks: [
-                {
-                    title: 'A lei do triunfo',
-                    author: 'Napoleon Hill',
-                    description: 'Mussum Ipsum, cacilds vidis litro abertis. Viva Forevis aptent taciti sociosqu ad litora torquent.',
-                    cover: 'https://kbimages1-a.akamaihd.net/1142be7b-d230-4893-9a45-8c178e9f198a/353/569/90/False/a-lei-do-triunfo-1.jpg',
-                    loan: false,
-                    read: false 
-                },
-                {
-                    title: 'A Startup enxuta',
-                    author: 'Eric Ries',
-                    description: 'Como os empreendedores atuais utilizam a inovação contínua para criar empresas extremamente bem-sucedidas.',
-                    cover: 'https://images-na.ssl-images-amazon.com/images/I/5166DtCGrEL.jpg',
-                    loan: false,
-                    read: false 
-                }
-            ]
+            textSearch: ''
         }
     },
 
@@ -95,6 +59,12 @@ export default {
             const newBooks = allBooks.filter((book) => book.title.toLowerCase().includes(text) || book.author.toLowerCase().includes(text))
 
             this.books = newBooks;
+        }
+    },
+
+    computed: {
+        allBooks() {
+            return this.$store.state.books
         }
     }
 

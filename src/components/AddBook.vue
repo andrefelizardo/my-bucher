@@ -63,6 +63,14 @@
 
             <md-snackbar>O livro tal foi salvo com sucesso!</md-snackbar>
         </form>
+        <md-dialog :md-active.sync="showDialog" md-backdrop:true>
+            <md-dialog-title>Sucesso!</md-dialog-title>
+            <md-dialog-content>{{form.title}} cadastrado com sucesso.</md-dialog-content>
+            <md-dialog-actions>
+                <md-button class="md-primary" @click="clearForm">Cadastrar mais um</md-button>
+                <md-button class="md-primary" @click="goToList">Ver livros cadastrados</md-button>
+            </md-dialog-actions>
+        </md-dialog>
     </main>
 </template>
 
@@ -71,6 +79,7 @@ export default {
   data() {
     return {
       sending: false,
+      showDialog: false,
       error: {
         title: {
           minlength: false
@@ -92,12 +101,8 @@ export default {
     };
   },
 
-  vuex: {
-
-  },
-
   methods: {
-    validateBook () {
+    validateBook() {
       this.sending = true;
       const errors = document.querySelectorAll(".md-invalid");
       for (let i = 0, total = errors.length; i < total; i++) {
@@ -119,8 +124,27 @@ export default {
         this.error.author.minlength = false;
       }
 
-      this.$store.commit('ADD_BOOK', this.form)
+      this.$store.commit("ADD_BOOK", this.form);
+      this.showDialog = true;
       this.sending = false;
+    },
+
+    clearForm () {
+      this.form = {
+        title: "",
+        author: "",
+        description: "",
+        category: "",
+        cover: "",
+        loan: false,
+        read: false
+      };
+
+      this.showDialog = false;
+    },
+
+    goToList () {
+        this.$router.push('/')
     }
   },
 
