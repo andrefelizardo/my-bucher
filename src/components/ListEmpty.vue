@@ -12,7 +12,7 @@ export default {
   name: 'ListEmpty',
 
   methods: {
-      goToAddBook () {
+      goToAddBook() {
           this.$router.push('add-book')
       }
   }

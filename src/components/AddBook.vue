@@ -90,11 +90,11 @@ export default {
       },
 
       form: {
-        title: "",
-        author: "",
-        description: "",
-        category: "",
-        cover: "",
+        title: '',
+        author: '',
+        description: '',
+        category: '',
+        cover: '',
         loan: false,
         read: false
       }
@@ -104,9 +104,9 @@ export default {
   methods: {
     validateBook() {
       this.sending = true;
-      const errors = document.querySelectorAll(".md-invalid");
+      const errors = document.querySelectorAll('.md-invalid');
       for (let i = 0, total = errors.length; i < total; i++) {
-        errors[i].classList.remove("md-invalid");
+        errors[i].classList.remove('md-invalid');
       }
 
       // validations
@@ -124,18 +124,18 @@ export default {
         this.error.author.minlength = false;
       }
 
-      this.$store.commit("ADD_BOOK", this.form);
+      this.$store.commit('ADD_BOOK', this.form);
       this.showDialog = true;
       this.sending = false;
     },
 
-    clearForm () {
+    clearForm() {
       this.form = {
-        title: "",
-        author: "",
-        description: "",
-        category: "",
-        cover: "",
+        title: '',
+        author: '',
+        description: '',
+        category: '',
+        cover: '',
         loan: false,
         read: false
       };
@@ -143,7 +143,7 @@ export default {
       this.showDialog = false;
     },
 
-    goToList () {
+    goToList() {
         this.$router.push('/')
     }
   },
@@ -151,9 +151,9 @@ export default {
   computed: {
     isValid: function() {
       return (
-        this.form.title !== "" &&
-        this.form.author !== "" &&
-        this.form.category !== ""
+        this.form.title !== '' &&
+        this.form.author !== '' &&
+        this.form.category !== ''
       );
     }
   }
