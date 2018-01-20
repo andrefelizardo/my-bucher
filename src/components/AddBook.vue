@@ -9,19 +9,18 @@
                 <md-card-content>
                     <div class="md-layout-row md-layout-wrap md-gutter">
                         <div class="md-flex md-flex-small-100">
-                            <md-field>
+                            <md-field :class="{ 'md-invalid': error.title.minlength }">
                                 <label for="title">Título</label>
                                 <md-input name="title" id="title" v-model="form.title" required></md-input>
-                                <span class="md-error">Título é obrigatório</span>
-                                <span class="md-error" v-if="form.error">Título do livro deve ter pelo menos 4 caracteres</span>
+                                <span class="md-error" v-show="error.title.minlength">Título do livro deve ter pelo menos 4 caracteres</span>
                             </md-field>
                         </div>
 
                         <div class="md-flex md-flex-small-100">
-                            <md-field>
+                            <md-field :class="{ 'md-invalid': error.author.minlength }">
                                 <label for="author">Autor</label>
                                 <md-input name="author" id="author" v-model="form.author" required></md-input>
-                                <span class="md-error">Autor é obrigatório</span>
+                                <span class="md-error">O nome do autor deve ter pelo menos 4 caracteres</span>
                             </md-field>
                         </div>
 
@@ -69,35 +68,65 @@
 
 <script>
 export default {
-  data () {
-      return {
-          sending: false,
+  data() {
+    return {
+      sending: false,
+      error: {
+        title: {
+          minlength: false
+        },
+        author: {
+          minlength: false
+        }
+      },
 
-          form: {
-              title: '',
-              author: '',
-              description: '',
-              category: '',
-              cover: '',
-              loan: false,
-              read: false
-          }
+      form: {
+        title: "",
+        author: "",
+        description: "",
+        category: "",
+        cover: "",
+        loan: false,
+        read: false
       }
+    };
   },
 
   methods: {
-      validateBook: function() {
-          if (this.form.title.length < 4)
-            this.title.error = true
+    validateBook: function() {
+      this.sending = true;
+      const errors = document.querySelectorAll(".md-invalid");
+      for (let i = 0, total = errors.length; i < total; i++) {
+        errors[i].classList.remove("md-invalid");
       }
+
+      // validations
+      if (this.form.title.length < 4) {
+        this.error.title.minlength = true;
+      } else {
+          this.error.title.minlength = false;
+      }
+
+      if (this.form.author.length < 4) {
+          this.error.author.minlength = true;
+      } else {
+          this.error.author.minlength = false;
+      }
+
+      this.sending = false;
+    }
   },
 
   computed: {
-      isValid: function() {
-          return this.form.title !== '' && this.form.author !== '' && this.form.category !== ''
-      }
+    isValid: function() {
+      return (
+        this.form.title !== "" &&
+        this.form.author !== "" &&
+        this.form.category !== ""
+      );
+    }
   }
-}
+};
 </script>
 
 <style scoped>
