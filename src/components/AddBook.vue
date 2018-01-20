@@ -46,7 +46,9 @@
 
                         <div class="md-flex md-flex-small-100">
                             <md-field>
-                                <label for="cover">Capa</label>
+                                <label for="cover">Capa (URL)
+                                    <md-tooltip md-delay="250">Insira a URL de uma imagem</md-tooltip>
+                                </label>
                                 <md-input type="url" v-model="form.cover"></md-input>
                             </md-field>
                         </div>
@@ -60,8 +62,6 @@
                 </md-card-actions>
 
             </md-card>
-
-            <md-snackbar>O livro tal foi salvo com sucesso!</md-snackbar>
         </form>
         <md-dialog :md-active.sync="showDialog" md-backdrop:true>
             <md-dialog-title>Sucesso!</md-dialog-title>
