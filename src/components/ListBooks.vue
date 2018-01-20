@@ -1,6 +1,8 @@
 <template>
   <div>
       <main class="main">
+        <list-empty v-if="allBooks.length < 1"></list-empty>
+        <div v-else>
             <div class="md-row">
                 <md-field md-inline>
                     <label>nome ou autor</label>
@@ -33,42 +35,51 @@
                     </div>
                 </div>
             </div>
+        </div>
       </main>
   </div>
 </template>
 
 <script>
+import ListEmpty from "./ListEmpty";
+
 export default {
-  name: 'ListBooks',
+  name: "ListBooks",
 
-    data () {
-        return {
+  data() {
+    return {
+      books: this.$store.state.books,
 
-            books: this.$store.state.books,
+      textSearch: ""
+    };
+  },
 
-            textSearch: ''
-        }
-    },
+  methods: {
+    searchBooks: function() {
+      const text = this.textSearch.toLowerCase();
+      const books = this.books;
+      const allBooks = this.allBooks;
 
-    methods: {
-        searchBooks: function() {
-            const text = this.textSearch.toLowerCase();
-            const books = this.books;
-            const allBooks = this.allBooks;
+      const newBooks = allBooks.filter(
+        book =>
+          book.title.toLowerCase().includes(text) ||
+          book.author.toLowerCase().includes(text)
+      );
 
-            const newBooks = allBooks.filter((book) => book.title.toLowerCase().includes(text) || book.author.toLowerCase().includes(text))
-
-            this.books = newBooks;
-        }
-    },
-
-    computed: {
-        allBooks() {
-            return this.$store.state.books
-        }
+      this.books = newBooks;
     }
+  },
 
-}
+  components: {
+    ListEmpty
+  },
+
+  computed: {
+    allBooks() {
+      return this.$store.state.books;
+    }
+  }
+};
 </script>
 
 <style scoped>
