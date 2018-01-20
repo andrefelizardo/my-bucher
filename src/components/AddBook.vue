@@ -92,8 +92,12 @@ export default {
     };
   },
 
+  vuex: {
+
+  },
+
   methods: {
-    validateBook: function() {
+    validateBook () {
       this.sending = true;
       const errors = document.querySelectorAll(".md-invalid");
       for (let i = 0, total = errors.length; i < total; i++) {
@@ -103,16 +107,19 @@ export default {
       // validations
       if (this.form.title.length < 4) {
         this.error.title.minlength = true;
+        return;
       } else {
-          this.error.title.minlength = false;
+        this.error.title.minlength = false;
       }
 
       if (this.form.author.length < 4) {
-          this.error.author.minlength = true;
+        this.error.author.minlength = true;
+        return;
       } else {
-          this.error.author.minlength = false;
+        this.error.author.minlength = false;
       }
 
+      this.$store.commit('ADD_BOOK', this.form)
       this.sending = false;
     }
   },
