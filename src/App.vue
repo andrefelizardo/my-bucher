@@ -6,17 +6,17 @@
 </template>
 
 <script>
-import HeaderMain from "@/components/HeaderMain";
+import HeaderMain from '@/components/HeaderMain'
 
 export default {
-  name: "app",
+  name: 'app',
 
   components: {
     HeaderMain
   },
 
-  data() {
-    return {};
+  data () {
+    return {}
   },
 
   methods: {}

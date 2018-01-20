@@ -1,6 +1,8 @@
 <template>
   <div>
       <main class="main">
+        <list-empty v-if="allBooks.length < 1"></list-empty>
+        <div v-else>
             <div class="md-row">
                 <md-field md-inline>
                     <label>nome ou autor</label>
@@ -13,7 +15,7 @@
                         <md-card>
                             <md-card-media-cover md-solid>
                                 <md-card-media>
-                                    <img :src="`/static/images/${book.cover}`" :alt="book.title">
+                                    <img :src="book.cover" :alt="book.title">
                                 </md-card-media>
 
                                 <md-card-area>
@@ -33,72 +35,51 @@
                     </div>
                 </div>
             </div>
+        </div>
       </main>
   </div>
 </template>
 
 <script>
+import ListEmpty from "./ListEmpty";
+
 export default {
-  name: 'ListBooks',
+  name: "ListBooks",
 
-    data () {
-        return {
+  data() {
+    return {
+      books: this.$store.state.books,
 
-            books: [
-                {
-                    title: 'A lei do triunfo',
-                    author: 'Napoleon Hill',
-                    description: 'Mussum Ipsum, cacilds vidis litro abertis. Viva Forevis aptent taciti sociosqu ad litora torquent.',
-                    cover: 'lei-do-triunfo.jpg',
-                    loan: false,
-                    read: false 
-                },
-                {
-                    title: 'A Startup enxuta',
-                    author: 'Eric Ries',
-                    description: 'Como os empreendedores atuais utilizam a inovação contínua para criar empresas extremamente bem-sucedidas.',
-                    cover: 'startup-enxuta.jpg',
-                    loan: false,
-                    read: false 
-                }
-            ],
+      textSearch: ""
+    };
+  },
 
-            textSearch: '',
+  methods: {
+    searchBooks: function() {
+      const text = this.textSearch.toLowerCase();
+      const books = this.books;
+      const allBooks = this.allBooks;
 
-            allBooks: [
-                {
-                    title: 'A lei do triunfo',
-                    author: 'Napoleon Hill',
-                    description: 'Mussum Ipsum, cacilds vidis litro abertis. Viva Forevis aptent taciti sociosqu ad litora torquent.',
-                    cover: 'lei-do-triunfo.jpg',
-                    loan: false,
-                    read: false 
-                },
-                {
-                    title: 'A Startup enxuta',
-                    author: 'Eric Ries',
-                    description: 'Como os empreendedores atuais utilizam a inovação contínua para criar empresas extremamente bem-sucedidas.',
-                    cover: 'startup-enxuta.jpg',
-                    loan: false,
-                    read: false 
-                }
-            ]
-        }
-    },
+      const newBooks = allBooks.filter(
+        book =>
+          book.title.toLowerCase().includes(text) ||
+          book.author.toLowerCase().includes(text)
+      );
 
-    methods: {
-        searchBooks: function() {
-            const text = this.textSearch.toLowerCase();
-            const books = this.books;
-            const allBooks = this.allBooks;
-
-            const newBooks = allBooks.filter((book) => book.title.toLowerCase().includes(text) || book.author.toLowerCase().includes(text))
-
-            this.books = newBooks;
-        }
+      this.books = newBooks;
     }
+  },
 
-}
+  components: {
+    ListEmpty
+  },
+
+  computed: {
+    allBooks() {
+      return this.$store.state.books;
+    }
+  }
+};
 </script>
 
 <style scoped>

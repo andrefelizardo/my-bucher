@@ -46,9 +46,9 @@
 
 <script>
 export default {
-  name: "HeaderMain",
+  name: 'HeaderMain',
 
-  data() {
+  data () {
       return {
           showNavigation: false
       }

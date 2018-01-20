@@ -9,18 +9,18 @@
                 <md-card-content>
                     <div class="md-layout-row md-layout-wrap md-gutter">
                         <div class="md-flex md-flex-small-100">
-                            <md-field>
+                            <md-field :class="{ 'md-invalid': error.title.minlength }">
                                 <label for="title">Título</label>
                                 <md-input name="title" id="title" v-model="form.title" required></md-input>
-                                <span class="md-error">Título é obrigatório</span>
+                                <span class="md-error" v-show="error.title.minlength">Título do livro deve ter pelo menos 4 caracteres</span>
                             </md-field>
                         </div>
 
                         <div class="md-flex md-flex-small-100">
-                            <md-field>
+                            <md-field :class="{ 'md-invalid': error.author.minlength }">
                                 <label for="author">Autor</label>
                                 <md-input name="author" id="author" v-model="form.author" required></md-input>
-                                <span class="md-error">Autor é obrigatório</span>
+                                <span class="md-error">O nome do autor deve ter pelo menos 4 caracteres</span>
                             </md-field>
                         </div>
 
@@ -47,7 +47,7 @@
                         <div class="md-flex md-flex-small-100">
                             <md-field>
                                 <label for="cover">Capa</label>
-                                <md-file accept="image/*" v-model="form.cover"></md-file>
+                                <md-input type="url" v-model="form.cover"></md-input>
                             </md-field>
                         </div>
                     </div>
@@ -63,39 +63,101 @@
 
             <md-snackbar>O livro tal foi salvo com sucesso!</md-snackbar>
         </form>
+        <md-dialog :md-active.sync="showDialog" md-backdrop:true>
+            <md-dialog-title>Sucesso!</md-dialog-title>
+            <md-dialog-content>{{form.title}} cadastrado com sucesso.</md-dialog-content>
+            <md-dialog-actions>
+                <md-button class="md-primary" @click="clearForm">Cadastrar mais um</md-button>
+                <md-button class="md-primary" @click="goToList">Ver livros cadastrados</md-button>
+            </md-dialog-actions>
+        </md-dialog>
     </main>
 </template>
 
 <script>
 export default {
   data() {
-      return {
-          sending: false,
+    return {
+      sending: false,
+      showDialog: false,
+      error: {
+        title: {
+          minlength: false
+        },
+        author: {
+          minlength: false
+        }
+      },
 
-          form: {
-              title: '',
-              author: '',
-              description: '',
-              category: '',
-              cover: '',
-              loan: false,
-              read: false
-          }
+      form: {
+        title: "",
+        author: "",
+        description: "",
+        category: "",
+        cover: "",
+        loan: false,
+        read: false
       }
+    };
   },
 
   methods: {
-      validateBook: function() {
-
+    validateBook() {
+      this.sending = true;
+      const errors = document.querySelectorAll(".md-invalid");
+      for (let i = 0, total = errors.length; i < total; i++) {
+        errors[i].classList.remove("md-invalid");
       }
+
+      // validations
+      if (this.form.title.length < 4) {
+        this.error.title.minlength = true;
+        return;
+      } else {
+        this.error.title.minlength = false;
+      }
+
+      if (this.form.author.length < 4) {
+        this.error.author.minlength = true;
+        return;
+      } else {
+        this.error.author.minlength = false;
+      }
+
+      this.$store.commit("ADD_BOOK", this.form);
+      this.showDialog = true;
+      this.sending = false;
+    },
+
+    clearForm () {
+      this.form = {
+        title: "",
+        author: "",
+        description: "",
+        category: "",
+        cover: "",
+        loan: false,
+        read: false
+      };
+
+      this.showDialog = false;
+    },
+
+    goToList () {
+        this.$router.push('/')
+    }
   },
 
   computed: {
-      isValid: function() {
-          return this.form.title != '' && this.form.author != '' && this.form.category != ''
-      }
+    isValid: function() {
+      return (
+        this.form.title !== "" &&
+        this.form.author !== "" &&
+        this.form.category !== ""
+      );
+    }
   }
-}
+};
 </script>
 
 <style scoped>
