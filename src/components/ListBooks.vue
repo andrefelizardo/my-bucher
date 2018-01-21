@@ -1,7 +1,7 @@
 <template>
   <div>
       <main class="main">
-        <list-empty v-if="allBooks.length < 1"></list-empty>
+        <list-empty icon='book' label='Cadastre seu primeiro livro' description='Cadastrando livros você vai poder gerenciá-los, controlar empréstimos e também marcar os já lidos.' text-button='Cadastrar primeiro livro' v-on:goTo='goToAddBook' v-if="allBooks.length < 1"></list-empty>
         <div v-else>
             <div class="md-row">
                 <md-field md-inline>
@@ -41,16 +41,16 @@
 </template>
 
 <script>
-import ListEmpty from './ListEmpty';
+import ListEmpty from "./ListEmpty";
 
 export default {
-  name: 'ListBooks',
+  name: "ListBooks",
 
   data() {
     return {
       books: this.$store.state.books,
 
-      textSearch: ''
+      textSearch: ""
     };
   },
 
@@ -67,6 +67,10 @@ export default {
       );
 
       this.books = newBooks;
+    },
+
+    goToAddBook() {
+      this.$router.push("add-book");
     }
   },
 
