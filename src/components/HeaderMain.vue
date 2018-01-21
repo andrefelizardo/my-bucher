@@ -2,7 +2,7 @@
   <header>
     <md-toolbar>
       <md-button class="md-icon-button" @click="toggleMenu"> <md-icon>menu</md-icon> </md-button>
-        <span class="md-title">myBücher - Seus livros em um só lugar</span>
+        <span class="md-title">myBücher<span class="subtitle md-xsmall-hide"> - Seus livros em um só lugar</span></span>
       </md-toolbar>
       <md-drawer :md-active.sync="showNavigation">
         <md-toolbar class="md-transparent" md-elevation="0">

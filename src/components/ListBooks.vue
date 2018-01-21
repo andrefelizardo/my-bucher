@@ -11,7 +11,7 @@
             </div>
             <div class="md-row">
                 <div class="md-layout md-gutter md-alignment-top-center">
-                    <div class="md-layout-item md-size-25" v-for="book in books">
+                    <div class="md-layout-item md-xsmall-size-100 md-small-size-45 md-large-size-25" v-for="book in books">
                         <md-card>
                             <md-card-media-cover md-solid>
                                 <md-card-media>
@@ -27,7 +27,7 @@
                                 <md-card-content>{{ book.description }}</md-card-content>
 
                                 <md-card-actions>
-                                    <md-button v-if="!book.loan">Emprestar</md-button>
+                                    <md-button v-if="!book.loan.status">Emprestar</md-button>
                                 </md-card-actions>
                                 </md-card-area>
                             </md-card-media-cover>
@@ -92,5 +92,8 @@ export default {
 }
 .md-card-content {
   max-height: 80px;
+}
+.md-layout-item {
+    margin-bottom: 2em;
 }
 </style>
