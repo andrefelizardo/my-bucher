@@ -41,16 +41,16 @@
 </template>
 
 <script>
-import ListEmpty from "./ListEmpty";
+import ListEmpty from './ListEmpty';
 
 export default {
-  name: "ListBooks",
+  name: 'ListBooks',
 
   data() {
     return {
       books: this.$store.state.books,
 
-      textSearch: ""
+      textSearch: ''
     };
   },
 

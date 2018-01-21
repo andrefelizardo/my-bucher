@@ -46,7 +46,7 @@
 
                         <div class="md-flex md-flex-small-100">
                             <md-field>
-                                <label for="cover">Capa</label>
+                                <label for="cover">Capa (URL)</label>
                                 <md-input type="url" v-model="form.cover"></md-input>
                             </md-field>
                         </div>
@@ -60,26 +60,20 @@
                 </md-card-actions>
 
             </md-card>
-
-            <md-snackbar>O livro tal foi salvo com sucesso!</md-snackbar>
         </form>
-        <md-dialog :md-active.sync="showDialog" md-backdrop:true>
-            <md-dialog-title>Sucesso!</md-dialog-title>
-            <md-dialog-content>{{form.title}} cadastrado com sucesso.</md-dialog-content>
-            <md-dialog-actions>
-                <md-button class="md-primary" @click="clearForm">Cadastrar mais um</md-button>
-                <md-button class="md-primary" @click="goToList">Ver livros cadastrados</md-button>
-            </md-dialog-actions>
-        </md-dialog>
+        <dialog-custom title='Sucesso!' content='Livro cadastrado com sucesso' button-secondary='Cadastrar mais' button-primary='Ver livros cadastrados' :status='showDialog' v-on:firstAction='goToList' v-on:secondAction='clearForm'></dialog-custom>
     </main>
 </template>
 
 <script>
+import DialogCustom from './Dialog'
+
 export default {
   data() {
     return {
       sending: false,
       showDialog: false,
+
       error: {
         title: {
           minlength: false
@@ -90,23 +84,27 @@ export default {
       },
 
       form: {
-        title: "",
-        author: "",
-        description: "",
-        category: "",
-        cover: "",
+        title: '',
+        author: '',
+        description: '',
+        category: '',
+        cover: '',
         loan: false,
         read: false
       }
     };
   },
 
+  components: {
+      DialogCustom
+  },
+
   methods: {
     validateBook() {
       this.sending = true;
-      const errors = document.querySelectorAll(".md-invalid");
+      const errors = document.querySelectorAll('.md-invalid');
       for (let i = 0, total = errors.length; i < total; i++) {
-        errors[i].classList.remove("md-invalid");
+        errors[i].classList.remove('md-invalid');
       }
 
       // validations
@@ -124,18 +122,18 @@ export default {
         this.error.author.minlength = false;
       }
 
-      this.$store.commit("ADD_BOOK", this.form);
+      this.$store.commit('ADD_BOOK', this.form);
       this.showDialog = true;
       this.sending = false;
     },
 
-    clearForm () {
+    clearForm() {
       this.form = {
-        title: "",
-        author: "",
-        description: "",
-        category: "",
-        cover: "",
+        title: '',
+        author: '',
+        description: '',
+        category: '',
+        cover: '',
         loan: false,
         read: false
       };
@@ -143,7 +141,7 @@ export default {
       this.showDialog = false;
     },
 
-    goToList () {
+    goToList() {
         this.$router.push('/')
     }
   },
@@ -151,15 +149,11 @@ export default {
   computed: {
     isValid: function() {
       return (
-        this.form.title !== "" &&
-        this.form.author !== "" &&
-        this.form.category !== ""
+        this.form.title !== '' &&
+        this.form.author !== '' &&
+        this.form.category !== ''
       );
     }
   }
 };
 </script>
-
-<style scoped>
-
-</style>

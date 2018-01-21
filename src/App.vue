@@ -15,7 +15,7 @@ export default {
     HeaderMain
   },
 
-  data () {
+  data() {
     return {}
   },
 
