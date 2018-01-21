@@ -27,7 +27,7 @@
                                 <md-card-content>{{ book.description }}</md-card-content>
 
                                 <md-card-actions>
-                                    <md-button v-if="!book.loan.status">Emprestar</md-button>
+                                    <md-button v-if="!book.loan.status" @click="lendBook">Emprestar</md-button>
                                 </md-card-actions>
                                 </md-card-area>
                             </md-card-media-cover>
@@ -35,13 +35,15 @@
                     </div>
                 </div>
             </div>
+            <dialog-prompt title='Com quem esse livro está?' confirm-text='Emprestar' max-length='20' placeholder='Digite o nome do amigo ou amiga' :status='openPrompt'></dialog-prompt>
         </div>
       </main>
   </div>
 </template>
 
 <script>
-import ListEmpty from "./ListEmpty";
+import ListEmpty from './ListEmpty'
+import DialogPrompt from './DialogPrompt'
 
 export default {
   name: 'ListBooks',
@@ -50,7 +52,8 @@ export default {
     return {
       books: this.$store.state.books,
 
-      textSearch: ""
+      textSearch: "",
+      openPrompt: false
     };
   },
 
@@ -71,11 +74,16 @@ export default {
 
     goToAddBook() {
       this.$router.push("add-book");
+    },
+
+    lendBook() {
+        this.openPrompt = true;
     }
   },
 
   components: {
-    ListEmpty
+    ListEmpty,
+    DialogPrompt
   },
 
   computed: {
