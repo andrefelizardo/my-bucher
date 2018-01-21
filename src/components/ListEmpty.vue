@@ -1,9 +1,9 @@
 <template>
   <md-empty-state
-      md-icon="book"
-      md-label="Cadastre seu primeiro livro"
-      md-description="Cadastrando livros você vai poder gerenciá-los, controlar empréstimos e também marcar os já lidos.">
-      <md-button class="md-primary md-raised" @click="goToAddBook">Cadastrar primeiro livro</md-button>
+      :md-icon='icon'
+      :md-label='label'
+      :md-description='description'>
+      <md-button class="md-primary md-raised" @click="callToAction" v-if="textButton">{{ textButton }}</md-button>
     </md-empty-state>
 </template>
 
@@ -11,9 +11,11 @@
 export default {
   name: 'ListEmpty',
 
+  props: ['icon', 'label', 'description', 'textButton'],
+
   methods: {
-      goToAddBook() {
-          this.$router.push('add-book')
+      callToAction() {
+          this.$emit('goTo')
       }
   }
 }
