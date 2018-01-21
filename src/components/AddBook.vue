@@ -134,7 +134,10 @@ export default {
         description: '',
         category: '',
         cover: '',
-        loan: false,
+        loan: {
+            status: false,
+            friend: ''
+        },
         read: false
       };
 

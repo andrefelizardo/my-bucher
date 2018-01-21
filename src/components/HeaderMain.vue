@@ -24,23 +24,6 @@
             </md-list-item>
           </router-link>
 
-          <router-link to="/list-friends" @click.native="toggleMenu">
-            <md-list-item>
-              <md-icon>people</md-icon>
-              <span class="md-list-item-text">Lista de amigos</span>
-            </md-list-item>
-          </router-link>
-
-          <md-list-item>
-            <md-icon>person_add</md-icon>
-            <span class="md-list-item-text">Cadastrar amigo</span>
-          </md-list-item>
-
-          <md-list-item>
-            <md-icon>exit_to_app</md-icon>
-            <span class="md-list-item-text">Sair</span>
-          </md-list-item>
-
         </md-list>
       </md-drawer>
   </header>

@@ -5,15 +5,11 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    books: [],
-    frieds: []
+    books: []
   },
   mutations: {
     ADD_BOOK (store, obj) {
       store.books.push(obj)
-    },
-    ADD_FRIEND (store, obj) {
-      store.friends.push(obj)
     }
   }
 })
