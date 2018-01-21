@@ -46,9 +46,7 @@
 
                         <div class="md-flex md-flex-small-100">
                             <md-field>
-                                <label for="cover">Capa (URL)
-                                    <md-tooltip md-delay="250">Insira a URL de uma imagem</md-tooltip>
-                                </label>
+                                <label for="cover">Capa (URL)</label>
                                 <md-input type="url" v-model="form.cover"></md-input>
                             </md-field>
                         </div>
@@ -63,23 +61,19 @@
 
             </md-card>
         </form>
-        <md-dialog :md-active.sync="showDialog" md-backdrop:true>
-            <md-dialog-title>Sucesso!</md-dialog-title>
-            <md-dialog-content>{{form.title}} cadastrado com sucesso.</md-dialog-content>
-            <md-dialog-actions>
-                <md-button class="md-primary" @click="clearForm">Cadastrar mais um</md-button>
-                <md-button class="md-primary" @click="goToList">Ver livros cadastrados</md-button>
-            </md-dialog-actions>
-        </md-dialog>
+        <dialog-custom title='Sucesso!' content='Livro cadastrado com sucesso' button-secondary='Cadastrar mais' button-primary='Ver livros cadastrados' :status='showDialog' v-on:firstAction='goToList' v-on:secondAction='clearForm'></dialog-custom>
     </main>
 </template>
 
 <script>
+import DialogCustom from './Dialog'
+
 export default {
   data() {
     return {
       sending: false,
       showDialog: false,
+
       error: {
         title: {
           minlength: false
@@ -99,6 +93,10 @@ export default {
         read: false
       }
     };
+  },
+
+  components: {
+      DialogCustom
   },
 
   methods: {
@@ -159,7 +157,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-
-</style>
