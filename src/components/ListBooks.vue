@@ -44,7 +44,7 @@
 import ListEmpty from "./ListEmpty";
 
 export default {
-  name: "ListBooks",
+  name: 'ListBooks',
 
   data() {
     return {

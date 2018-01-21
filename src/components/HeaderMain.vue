@@ -24,10 +24,12 @@
             </md-list-item>
           </router-link>
 
-          <md-list-item>
-            <md-icon>people</md-icon>
-            <span class="md-list-item-text">Lista de amigos</span>
-          </md-list-item>
+          <router-link to="/list-friends" @click.native="toggleMenu">
+            <md-list-item>
+              <md-icon>people</md-icon>
+              <span class="md-list-item-text">Lista de amigos</span>
+            </md-list-item>
+          </router-link>
 
           <md-list-item>
             <md-icon>person_add</md-icon>
@@ -48,7 +50,7 @@
 export default {
   name: 'HeaderMain',
 
-  data () {
+  data() {
       return {
           showNavigation: false
       }
