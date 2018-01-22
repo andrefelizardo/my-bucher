@@ -29,17 +29,21 @@
                                 <md-card-actions>
                                     <md-speed-dial class="md-bottom-right" md-direction="top" md-event="click">
                                         <md-speed-dial-target class="md-primary">
-                                            <md-icon class="md-morph-initial">add</md-icon>
+                                            <md-icon class="md-morph-initial">menu</md-icon>
                                             <md-icon class="md-morph-final">close</md-icon>
                                         </md-speed-dial-target>
 
-                                        <md-speed-dial-content>
-                                            <md-button class="md-icon-button">
-                                            <md-icon>directions</md-icon>
+                                        <md-speed-dial-content class="custom-icons">
+                                            <md-button class="md-icon-button" v-if="!book.loan.status" @click="openDialogPrompt(index)">
+                                                <md-icon>person_add</md-icon>
+                                            </md-button>
+
+                                            <md-button class="md-icon-button" v-else @click="openLoanData(index)">
+                                                <md-icon>undo</md-icon>
                                             </md-button>
 
                                             <md-button class="md-icon-button">
-                                            <md-icon>streetview</md-icon>
+                                                <md-icon>bookmark</md-icon>
                                             </md-button>
                                         </md-speed-dial-content>
                                     </md-speed-dial>
@@ -161,5 +165,9 @@ export default {
 }
 .md-layout-item {
     margin-bottom: 2em;
+}
+.md-card-media-cover .md-card-actions .md-button:not(.md-primary):not(.md-accent).md-icon-button .md-icon, {
+    color: rgba(0,0,0,0.54)!important;
+    color: var(--md-theme-default-icon-on-background, rgba(0,0,0,0.54))!important;
 }
 </style>
