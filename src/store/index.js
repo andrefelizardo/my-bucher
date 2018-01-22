@@ -11,9 +11,9 @@ export default new Vuex.Store({
     ADD_BOOK (store, obj) {
       store.books.push(obj)
     },
-    LEND_BOOK (store, pos, name) {
-      store.books[pos].loan.friend = name
-      store.books[pos].loan.status = true
+    LEND_BOOK (store, obj) {
+      store.books[obj.pos].loan.friend = obj.friend
+      store.books[obj.pos].loan.status = true
     }
   }
 })

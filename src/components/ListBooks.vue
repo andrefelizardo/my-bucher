@@ -11,7 +11,7 @@
             </div>
             <div class="md-row">
                 <div class="md-layout md-gutter md-alignment-top-center">
-                    <div class="md-layout-item md-xsmall-size-100 md-small-size-45 md-large-size-25" v-for="book in books">
+                    <div class="md-layout-item md-xsmall-size-100 md-small-size-45 md-large-size-25" v-for="(book, index) in books">
                         <md-card>
                             <md-card-media-cover md-solid>
                                 <md-card-media>
@@ -27,7 +27,8 @@
                                 <md-card-content>{{ book.description }}</md-card-content>
 
                                 <md-card-actions>
-                                    <md-button v-if="!book.loan.status" @click="lendBook">Emprestar</md-button>
+                                    <md-button v-if="!book.loan.status" @click="openDialogPrompt(index)">Emprestar</md-button>
+                                    <md-button v-else>Emprestado</md-button>
                                 </md-card-actions>
                                 </md-card-area>
                             </md-card-media-cover>
@@ -35,7 +36,8 @@
                     </div>
                 </div>
             </div>
-            <dialog-prompt title='Com quem esse livro está?' confirm-text='Emprestar' max-length='20' placeholder='Digite o nome do amigo ou amiga' :status='openPrompt'></dialog-prompt>
+            <dialog-prompt title='Com quem esse livro está?' confirm-text='Emprestar' max-length='20' placeholder='Digite o nome do amigo ou amiga' :status='openPrompt' v-on:confirmPrompt='lendBook'></dialog-prompt>
+            <dialog-custom title='Empréstimo!' content='Livro emprestado para fulano de tal' button-primary='Foi devolvido!' :status='showDialog' v-on:firstAction='returnBook'></dialog-custom>
         </div>
       </main>
   </div>
@@ -44,6 +46,7 @@
 <script>
 import ListEmpty from './ListEmpty'
 import DialogPrompt from './DialogPrompt'
+import DialogCustom from './Dialog'
 
 export default {
   name: 'ListBooks',
@@ -52,16 +55,18 @@ export default {
     return {
       books: this.$store.state.books,
 
-      textSearch: "",
-      openPrompt: false
+      selectedBook: '',
+      textSearch: '',
+      openPrompt: false,
+      showDialog: false
     };
   },
 
   methods: {
     searchBooks: function() {
-      const text = this.textSearch.toLowerCase();
-      const books = this.books;
-      const allBooks = this.allBooks;
+      const text = this.textSearch.toLowerCase()
+      const books = this.books
+      const allBooks = this.allBooks
 
       const newBooks = allBooks.filter(
         book =>
@@ -69,26 +74,43 @@ export default {
           book.author.toLowerCase().includes(text)
       );
 
-      this.books = newBooks;
+      this.books = newBooks
     },
 
-    goToAddBook() {
-      this.$router.push("add-book");
+    goToAddBook: function() {
+      this.$router.push("add-book")
     },
 
-    lendBook() {
-        this.openPrompt = true;
+    openDialogPrompt(index) {
+        this.selectedBook = index
+        this.openPrompt = true
+    },
+
+    lendBook(name) {
+        const loan = {
+            friend: name,
+            pos: this.selectedBook
+        }
+
+        this.$store.commit('LEND_BOOK', loan)
+
+        this.openPrompt = false
+    },
+
+    returnBook() {
+
     }
   },
 
   components: {
     ListEmpty,
-    DialogPrompt
+    DialogPrompt,
+    DialogCustom
   },
 
   computed: {
     allBooks() {
-      return this.$store.state.books;
+      return this.$store.state.books
     }
   }
 };

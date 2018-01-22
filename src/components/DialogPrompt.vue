@@ -5,7 +5,9 @@
       :md-title="title"
       :md-input-maxlength="maxLength"
       :md-input-placeholder="placeholder"
-      :md-confirm-text="confirmText" />
+      :md-confirm-text="confirmText"
+      @md-confirm="confirmAction()"
+      @md-cancel="cancelAction()" />
 </template>
 
 <script>
@@ -16,7 +18,18 @@ export default {
 
   data() {
       return {
-          value: ''
+          value: null
+      }
+  },
+
+  methods: {
+      confirmAction() {
+          this.$emit('confirmPrompt', this.value)
+      },
+
+      cancelAction() {
+          this.value = null
+          this.$emit('cancelPrompt')
       }
   }
 }
