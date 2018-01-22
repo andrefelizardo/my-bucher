@@ -27,8 +27,24 @@
                                 <md-card-content>{{ book.description }}</md-card-content>
 
                                 <md-card-actions>
-                                    <md-button v-if="!book.loan.status" @click="openDialogPrompt(index)">Emprestar</md-button>
-                                    <md-button v-else>Emprestado</md-button>
+                                    <md-speed-dial class="md-bottom-right" md-direction="top" md-event="click">
+                                        <md-speed-dial-target class="md-primary">
+                                            <md-icon class="md-morph-initial">add</md-icon>
+                                            <md-icon class="md-morph-final">close</md-icon>
+                                        </md-speed-dial-target>
+
+                                        <md-speed-dial-content>
+                                            <md-button class="md-icon-button">
+                                            <md-icon>directions</md-icon>
+                                            </md-button>
+
+                                            <md-button class="md-icon-button">
+                                            <md-icon>streetview</md-icon>
+                                            </md-button>
+                                        </md-speed-dial-content>
+                                    </md-speed-dial>
+                                    <!-- <md-button v-if="!book.loan.status" @click="openDialogPrompt(index)">Emprestar</md-button> -->
+                                    <!-- <md-button v-else @click="openLoanData(index)">Emprestado</md-button> -->
                                 </md-card-actions>
                                 </md-card-area>
                             </md-card-media-cover>
@@ -36,8 +52,12 @@
                     </div>
                 </div>
             </div>
-            <dialog-prompt title='Com quem esse livro está?' confirm-text='Emprestar' max-length='20' placeholder='Digite o nome do amigo ou amiga' :status='openPrompt' v-on:confirmPrompt='lendBook'></dialog-prompt>
-            <dialog-custom title='Empréstimo!' content='Livro emprestado para fulano de tal' button-primary='Foi devolvido!' :status='showDialog' v-on:firstAction='returnBook'></dialog-custom>
+            <dialog-prompt title='Você emprestou este livro?' confirm-text='Emprestar' max-length='20' placeholder='Digite o nome do amigo ou amiga' :status='openPrompt' v-on:confirmPrompt='lendBook'></dialog-prompt>
+            <dialog-custom title='Esse livro está emprestado!' :content='contentLoan' button-primary='Foi devolvido!' button-secondary='Voltar' :status='showDialog' v-on:firstAction='returnBook' v-on:secondAction='closeLoanData'></dialog-custom>
+
+            <md-snackbar md-position="center" :md-duration="4000" :md-active.sync="showSnackbar" md-persistent>
+                <span>Livro devolvido com sucesso. Que amigo legal você tem!</span>
+            </md-snackbar>
         </div>
       </main>
   </div>
@@ -55,10 +75,12 @@ export default {
     return {
       books: this.$store.state.books,
 
-      selectedBook: '',
-      textSearch: '',
+      selectedBook: null,
+      textSearch: null,
+      contentLoan: null,
       openPrompt: false,
-      showDialog: false
+      showDialog: false,
+      showSnackbar: false
     };
   },
 
@@ -97,8 +119,22 @@ export default {
         this.openPrompt = false
     },
 
-    returnBook() {
+    openLoanData(index) {
+        this.showDialog = true
+        this.selectedBook = index
+        const friendName = this.allBooks[index].loan.friend
+        this.contentLoan = `Livro emprestado para ${friendName}.`
+    },
 
+    closeLoanData() {
+        this.showDialog = false
+    },
+
+    returnBook() {
+        this.$store.commit('RETURN_BOOK', this.selectedBook)
+        this.showSnackbar = true
+
+        this.closeLoanData()
     }
   },
 
