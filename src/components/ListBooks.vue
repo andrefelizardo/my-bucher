@@ -11,14 +11,14 @@
             </div>
             <div class="md-row">
                 <div class="md-layout md-gutter md-alignment-top-center">
-                    <div class="md-layout-item md-xsmall-size-100 md-small-size-45 md-large-size-25" v-for="(book, index) in books">
+                    <div class="md-layout-item md-xsmall-size-100 md-small-size-45 md-medium-size-30 md-size-30" v-for="(book, index) in books">
                         <md-card>
                             <md-card-media-cover md-solid>
                                 <md-card-media>
                                     <img :src="book.cover" :alt="book.title">
                                 </md-card-media>
 
-                                <md-card-area>
+                                <md-card-area class="area-custom">
                                 <md-card-header>
                                     <span class="md-title">{{ book.title }}</span>
                                     <span class="md-subtitle">{{ book.author }}</span>
@@ -27,28 +27,8 @@
                                 <md-card-content>{{ book.description }}</md-card-content>
 
                                 <md-card-actions>
-                                    <md-speed-dial class="md-bottom-right" md-direction="top" md-event="click">
-                                        <md-speed-dial-target class="md-primary">
-                                            <md-icon class="md-morph-initial">menu</md-icon>
-                                            <md-icon class="md-morph-final">close</md-icon>
-                                        </md-speed-dial-target>
-
-                                        <md-speed-dial-content class="custom-icons">
-                                            <md-button class="md-icon-button" v-if="!book.loan.status" @click="openDialogPrompt(index)">
-                                                <md-icon>person_add</md-icon>
-                                            </md-button>
-
-                                            <md-button class="md-icon-button" v-else @click="openLoanData(index)">
-                                                <md-icon>undo</md-icon>
-                                            </md-button>
-
-                                            <md-button class="md-icon-button">
-                                                <md-icon>bookmark</md-icon>
-                                            </md-button>
-                                        </md-speed-dial-content>
-                                    </md-speed-dial>
-                                    <!-- <md-button v-if="!book.loan.status" @click="openDialogPrompt(index)">Emprestar</md-button> -->
-                                    <!-- <md-button v-else @click="openLoanData(index)">Emprestado</md-button> -->
+                                    <md-button v-if="!book.loan.status" @click="openDialogPrompt(index)">Emprestar</md-button>
+                                    <md-button v-else @click="openLoanData(index)">Emprestado</md-button>
                                 </md-card-actions>
                                 </md-card-area>
                             </md-card-media-cover>
@@ -56,7 +36,7 @@
                     </div>
                 </div>
             </div>
-            <dialog-prompt title='Você emprestou este livro?' confirm-text='Emprestar' max-length='20' placeholder='Digite o nome do amigo ou amiga' :status='openPrompt' v-on:confirmPrompt='lendBook'></dialog-prompt>
+            <dialog-prompt title='Você emprestou este livro?' confirm-text='Emprestar' max-length='20' placeholder='Digite o nome do amigo ou amiga' :status='openPrompt' v-on:confirmPrompt='lendBook' v-on:cancelPrompt='closePrompt'></dialog-prompt>
             <dialog-custom title='Esse livro está emprestado!' :content='contentLoan' button-primary='Foi devolvido!' button-secondary='Voltar' :status='showDialog' v-on:firstAction='returnBook' v-on:secondAction='closeLoanData'></dialog-custom>
 
             <md-snackbar md-position="center" :md-duration="4000" :md-active.sync="showSnackbar" md-persistent>
@@ -120,7 +100,7 @@ export default {
 
         this.$store.commit('LEND_BOOK', loan)
 
-        this.openPrompt = false
+        this.closePrompt()
     },
 
     openLoanData(index) {
@@ -132,6 +112,10 @@ export default {
 
     closeLoanData() {
         this.showDialog = false
+    },
+
+    closePrompt() {
+        this.openPrompt = false
     },
 
     returnBook() {
@@ -157,17 +141,10 @@ export default {
 </script>
 
 <style scoped>
-.md-card-media img {
-  min-height: 400px;
-}
-.md-card-content {
-  max-height: 80px;
-}
 .md-layout-item {
     margin-bottom: 2em;
 }
-.md-card-media-cover .md-card-actions .md-button:not(.md-primary):not(.md-accent).md-icon-button .md-icon, {
-    color: rgba(0,0,0,0.54)!important;
-    color: var(--md-theme-default-icon-on-background, rgba(0,0,0,0.54))!important;
+.md-card-area.area-custom {
+    background: rgba(0, 0, 0, .75)!important;
 }
 </style>
