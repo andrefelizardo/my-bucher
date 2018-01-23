@@ -41,7 +41,7 @@ export default {
 
   methods: {
     toggleMenu: function() {
-      this.showNavigation = !this.showNavigation;
+      this.showNavigation = !this.showNavigation
     }
   }
 };
