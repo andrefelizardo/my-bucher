@@ -41,7 +41,7 @@
                                             <md-icon>check_box</md-icon>
                                         </md-button>
 
-                                        <md-button class="md-icon-button">
+                                        <md-button class="md-icon-button" @click="showInfo(index)">
                                             <md-tooltip md-direction="top">Veja as informações do livro</md-tooltip>
                                             <md-icon>info</md-icon>
                                         </md-button>
@@ -56,7 +56,27 @@
             </div>
             <dialog-prompt title='Você emprestou este livro?' confirm-text='Emprestar' max-length='20' placeholder='Digite o nome do amigo ou amiga' :status='openPrompt' v-on:confirmPrompt='lendBook' v-on:cancelPrompt='closePrompt'></dialog-prompt>
             <dialog-custom title='Esse livro está emprestado!' :content='contentLoan' button-primary='Foi devolvido!' button-secondary='Voltar' :status='showDialog' v-on:firstAction='returnBook' v-on:secondAction='closeLoanData'></dialog-custom>
-            <dialog-custom title='Informações do livro' content='Todos os dados do livro aqui'></dialog-custom>
+
+            <md-dialog :md-active.sync="showDialogInfo" v-if="showDialogInfo">
+                <md-dialog-title>Informações do livro</md-dialog-title>
+                <md-dialog-content>
+                    <p><strong>Nome do livro: </strong> {{ book.title }}</p>
+                    <p><strong>Autor(a): </strong> {{ book.author }}</p>
+                    <p v-if="book.description"><strong>Descrição: </strong> {{ book.description }}</p>
+                    <p v-else><strong>Livro sem descrição cadastrada</strong></p>
+                    <p><strong>Status: </strong> 
+                        <span v-if="book.loan.status">emprestado a {{book.loan.friend}}</span>
+                        <span v-else>Livro não emprestado</span>
+                    </p>
+                    <p><strong>Lido: </strong>
+                        <span v-if="book.read">Sim</span>
+                        <span v-else>Não</span>
+                    </p>
+                </md-dialog-content>
+                <md-dialog-actions>
+                    <md-button class="md-primary" @click="showDialogInfo = false">Fechar</md-button>
+                </md-dialog-actions>
+            </md-dialog>
 
             <md-snackbar md-position="center" :md-duration="4000" :md-active.sync="showSnackbar" md-persistent>
                 <span>Livro devolvido com sucesso. Que amigo legal você tem!</span>
@@ -78,11 +98,13 @@ export default {
     return {
       books: this.$store.state.books,
 
+    book: null,
       selectedBook: null,
       textSearch: null,
       contentLoan: null,
       openPrompt: false,
       showDialog: false,
+      showDialogInfo: false,
       showSnackbar: false
     };
   },
@@ -142,6 +164,11 @@ export default {
         this.showSnackbar = true
 
         this.closeLoanData()
+    },
+
+    showInfo(index) {
+        this.book = this.$store.state.books[index]
+        this.showDialogInfo = true
     }
   },
 

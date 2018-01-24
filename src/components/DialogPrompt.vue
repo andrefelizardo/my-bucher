@@ -25,7 +25,7 @@ export default {
   methods: {
       confirmAction() {
           this.$emit('confirmPrompt', this.value)
-          this.value = null
+        //   this.value = null
       },
 
       cancelAction() {
