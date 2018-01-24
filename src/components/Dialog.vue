@@ -17,11 +17,11 @@ export default {
 
   methods: {
     buttonPrimaryAction() {
-      this.$emit("firstAction");
+      this.$emit("firstAction")
     },
 
     buttonSecondaryAction() {
-      this.$emit("secondAction");
+      this.$emit("secondAction")
     }
   }
 };

@@ -89,7 +89,10 @@ export default {
         description: '',
         category: '',
         cover: '',
-        loan: false,
+        loan: {
+            status: false,
+            friend: ''
+        },
         read: false
       }
     };
@@ -107,7 +110,6 @@ export default {
         errors[i].classList.remove('md-invalid');
       }
 
-      // validations
       if (this.form.title.length < 4) {
         this.error.title.minlength = true;
         return;
@@ -122,9 +124,13 @@ export default {
         this.error.author.minlength = false;
       }
 
-      this.$store.commit('ADD_BOOK', this.form);
-      this.showDialog = true;
-      this.sending = false;
+        this.registerBook()  
+    },
+
+    registerBook() {
+        this.$store.commit('ADD_BOOK', this.form);
+        this.showDialog = true;
+        this.sending = false;
     },
 
     clearForm() {
@@ -134,7 +140,10 @@ export default {
         description: '',
         category: '',
         cover: '',
-        loan: false,
+        loan: {
+            status: false,
+            friend: ''
+        },
         read: false
       };
 
