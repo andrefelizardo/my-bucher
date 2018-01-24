@@ -26,9 +26,27 @@
 
                                 <md-card-content>{{ book.description }}</md-card-content>
 
-                                <md-card-actions>
+                                <md-card-actions md-alignment="space-between">
                                     <md-button v-if="!book.loan.status" @click="openDialogPrompt(index)">Emprestar</md-button>
                                     <md-button v-else @click="openLoanData(index)">Emprestado</md-button>
+
+                                    <div>
+
+                                        <md-button class="md-icon-button" v-if="!book.read" @click="book.read = !book.read">
+                                            <md-tooltip md-direction="top">Marcar livro como lido</md-tooltip>
+                                            <md-icon>check_box_outline_blank</md-icon>
+                                        </md-button>
+                                        <md-button class="md-icon-button" v-else @click="book.read = !book.read">
+                                            <md-tooltip md-direction="top">Desmarcar livro como lido</md-tooltip>
+                                            <md-icon>check_box</md-icon>
+                                        </md-button>
+
+                                        <md-button class="md-icon-button">
+                                            <md-tooltip md-direction="top">Veja as informações do livro</md-tooltip>
+                                            <md-icon>info</md-icon>
+                                        </md-button>
+                                    </div>
+                                    
                                 </md-card-actions>
                                 </md-card-area>
                             </md-card-media-cover>
@@ -38,6 +56,7 @@
             </div>
             <dialog-prompt title='Você emprestou este livro?' confirm-text='Emprestar' max-length='20' placeholder='Digite o nome do amigo ou amiga' :status='openPrompt' v-on:confirmPrompt='lendBook' v-on:cancelPrompt='closePrompt'></dialog-prompt>
             <dialog-custom title='Esse livro está emprestado!' :content='contentLoan' button-primary='Foi devolvido!' button-secondary='Voltar' :status='showDialog' v-on:firstAction='returnBook' v-on:secondAction='closeLoanData'></dialog-custom>
+            <dialog-custom title='Informações do livro' content='Todos os dados do livro aqui'></dialog-custom>
 
             <md-snackbar md-position="center" :md-duration="4000" :md-active.sync="showSnackbar" md-persistent>
                 <span>Livro devolvido com sucesso. Que amigo legal você tem!</span>
@@ -141,6 +160,9 @@ export default {
 </script>
 
 <style scoped>
+.md-card-media-cover {
+    min-height: 400px;
+}
 .md-layout-item {
     margin-bottom: 2em;
 }
