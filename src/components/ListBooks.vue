@@ -11,14 +11,14 @@
             </div>
             <div class="md-row">
                 <div class="md-layout md-gutter md-alignment-top-center">
-                    <div class="md-layout-item md-size-25" v-for="book in books">
+                    <div class="md-layout-item md-xsmall-size-100 md-small-size-45 md-medium-size-30 md-size-30" v-for="(book, index) in books">
                         <md-card>
                             <md-card-media-cover md-solid>
                                 <md-card-media>
                                     <img :src="book.cover" :alt="book.title">
                                 </md-card-media>
 
-                                <md-card-area>
+                                <md-card-area class="area-custom">
                                 <md-card-header>
                                     <span class="md-title">{{ book.title }}</span>
                                     <span class="md-subtitle">{{ book.author }}</span>
@@ -26,8 +26,27 @@
 
                                 <md-card-content>{{ book.description }}</md-card-content>
 
-                                <md-card-actions>
-                                    <md-button v-if="!book.loan">Emprestar</md-button>
+                                <md-card-actions md-alignment="space-between">
+                                    <md-button v-if="!book.loan.status" @click="openDialogPrompt(index)">Emprestar</md-button>
+                                    <md-button v-else @click="openLoanData(index)">Emprestado</md-button>
+
+                                    <div>
+
+                                        <md-button class="md-icon-button" v-if="!book.read" @click="book.read = !book.read">
+                                            <md-tooltip md-direction="top">Marcar livro como lido</md-tooltip>
+                                            <md-icon>check_box_outline_blank</md-icon>
+                                        </md-button>
+                                        <md-button class="md-icon-button" v-else @click="book.read = !book.read">
+                                            <md-tooltip md-direction="top">Desmarcar livro como lido</md-tooltip>
+                                            <md-icon>check_box</md-icon>
+                                        </md-button>
+
+                                        <md-button class="md-icon-button" @click="showInfo(index)">
+                                            <md-tooltip md-direction="top">Veja as informações do livro</md-tooltip>
+                                            <md-icon>info</md-icon>
+                                        </md-button>
+                                    </div>
+                                    
                                 </md-card-actions>
                                 </md-card-area>
                             </md-card-media-cover>
@@ -35,13 +54,42 @@
                     </div>
                 </div>
             </div>
+            <dialog-prompt title='Você emprestou este livro?' confirm-text='Emprestar' max-length='20' placeholder='Digite o nome do amigo ou amiga' :status='openPrompt' v-on:confirmPrompt='lendBook' v-on:cancelPrompt='closePrompt'></dialog-prompt>
+            <dialog-custom title='Esse livro está emprestado!' :content='contentLoan' button-primary='Foi devolvido!' button-secondary='Voltar' :status='showDialog' v-on:firstAction='returnBook' v-on:secondAction='closeLoanData'></dialog-custom>
+
+            <md-dialog :md-active.sync="showDialogInfo" v-if="showDialogInfo">
+                <md-dialog-title>Informações do livro</md-dialog-title>
+                <md-dialog-content>
+                    <p><strong>Nome do livro: </strong> {{ book.title }}</p>
+                    <p><strong>Autor(a): </strong> {{ book.author }}</p>
+                    <p v-if="book.description"><strong>Descrição: </strong> {{ book.description }}</p>
+                    <p v-else><strong>Livro sem descrição cadastrada</strong></p>
+                    <p><strong>Status: </strong> 
+                        <span v-if="book.loan.status">emprestado a {{book.loan.friend}}</span>
+                        <span v-else>Livro não emprestado</span>
+                    </p>
+                    <p><strong>Lido: </strong>
+                        <span v-if="book.read">Sim</span>
+                        <span v-else>Não</span>
+                    </p>
+                </md-dialog-content>
+                <md-dialog-actions>
+                    <md-button class="md-primary" @click="showDialogInfo = false">Fechar</md-button>
+                </md-dialog-actions>
+            </md-dialog>
+
+            <md-snackbar md-position="center" :md-duration="4000" :md-active.sync="showSnackbar" md-persistent>
+                <span>Livro devolvido com sucesso. Que amigo legal você tem!</span>
+            </md-snackbar>
         </div>
       </main>
   </div>
 </template>
 
 <script>
-import ListEmpty from "./ListEmpty";
+import ListEmpty from './ListEmpty'
+import DialogPrompt from './DialogPrompt'
+import DialogCustom from './Dialog'
 
 export default {
   name: 'ListBooks',
@@ -50,15 +98,22 @@ export default {
     return {
       books: this.$store.state.books,
 
-      textSearch: ""
+    book: null,
+      selectedBook: null,
+      textSearch: null,
+      contentLoan: null,
+      openPrompt: false,
+      showDialog: false,
+      showDialogInfo: false,
+      showSnackbar: false
     };
   },
 
   methods: {
     searchBooks: function() {
-      const text = this.textSearch.toLowerCase();
-      const books = this.books;
-      const allBooks = this.allBooks;
+      const text = this.textSearch.toLowerCase()
+      const books = this.books
+      const allBooks = this.allBooks
 
       const newBooks = allBooks.filter(
         book =>
@@ -66,31 +121,79 @@ export default {
           book.author.toLowerCase().includes(text)
       );
 
-      this.books = newBooks;
+      this.books = newBooks
     },
 
-    goToAddBook() {
-      this.$router.push("add-book");
+    goToAddBook: function() {
+      this.$router.push("add-book")
+    },
+
+    openDialogPrompt(index) {
+        this.selectedBook = index
+        this.openPrompt = true
+    },
+
+    lendBook(name) {
+        const loan = {
+            friend: name,
+            pos: this.selectedBook
+        }
+
+        this.$store.commit('LEND_BOOK', loan)
+
+        this.closePrompt()
+    },
+
+    openLoanData(index) {
+        this.showDialog = true
+        this.selectedBook = index
+        const friendName = this.allBooks[index].loan.friend
+        this.contentLoan = `Livro emprestado para ${friendName}.`
+    },
+
+    closeLoanData() {
+        this.showDialog = false
+    },
+
+    closePrompt() {
+        this.openPrompt = false
+    },
+
+    returnBook() {
+        this.$store.commit('RETURN_BOOK', this.selectedBook)
+        this.showSnackbar = true
+
+        this.closeLoanData()
+    },
+
+    showInfo(index) {
+        this.book = this.$store.state.books[index]
+        this.showDialogInfo = true
     }
   },
 
   components: {
-    ListEmpty
+    ListEmpty,
+    DialogPrompt,
+    DialogCustom
   },
 
   computed: {
     allBooks() {
-      return this.$store.state.books;
+      return this.$store.state.books
     }
   }
 };
 </script>
 
 <style scoped>
-.md-card-media img {
-  min-height: 400px;
+.md-card-media-cover {
+    min-height: 400px;
 }
-.md-card-content {
-  max-height: 80px;
+.md-layout-item {
+    margin-bottom: 2em;
+}
+.md-card-area.area-custom {
+    background: rgba(0, 0, 0, .75)!important;
 }
 </style>

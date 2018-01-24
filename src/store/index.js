@@ -5,15 +5,19 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    books: [],
-    frieds: []
+    books: []
   },
   mutations: {
     ADD_BOOK (store, obj) {
       store.books.push(obj)
     },
-    ADD_FRIEND (store, obj) {
-      store.friends.push(obj)
+    LEND_BOOK (store, obj) {
+      store.books[obj.pos].loan.friend = obj.friend
+      store.books[obj.pos].loan.status = true
+    },
+    RETURN_BOOK (store, pos) {
+      store.books[pos].loan.friend = null
+      store.books[pos].loan.status = false
     }
   }
 })
