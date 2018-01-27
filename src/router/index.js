@@ -13,9 +13,15 @@ export default new Router({
       component: ListBooks
     },
     {
-      path: '/add-book',
+      path: '/book',
       name: 'AddBook',
       component: AddBook
+    },
+    {
+      path: '/edit-book/:id',
+      name: 'EditBook',
+      component: AddBook,
+      props: true
     }
   ]
 })

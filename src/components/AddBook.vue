@@ -4,6 +4,7 @@
             <md-card class="md-flex-50 md-flex-small-100">
                 <md-card-header>
                     <div class="md-title">Preencha os dados do livro</div>
+                    <span v-if="isEdit">To editando!</span>
                 </md-card-header>
 
                 <md-card-content>
@@ -162,6 +163,10 @@ export default {
         this.form.author !== '' &&
         this.form.category !== ''
       );
+    },
+
+    isEdit: function() {
+        return this.$route.params.id
     }
   }
 };
