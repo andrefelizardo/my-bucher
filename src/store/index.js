@@ -21,6 +21,9 @@ export default new Vuex.Store({
     RETURN_BOOK (store, pos) {
       store.books[pos].loan.friend = null
       store.books[pos].loan.status = false
+    },
+    UPDATE_BOOK (store, obj) {
+      
     }
   }
 })

@@ -74,7 +74,7 @@
                     </p>
                 </md-dialog-content>
                 <md-dialog-actions>
-                  <md-button @click="editBook(book.id)">Editar livro</md-button>
+                  <md-button @click="editBook()">Editar livro</md-button>
                     <md-button class="md-primary" @click="showDialogInfo = false">Fechar</md-button>
                 </md-dialog-actions>
             </md-dialog>
@@ -169,11 +169,13 @@ export default {
 
     showInfo(index) {
         this.book = this.$store.state.books[index]
+        console.log(this.book.id, 'show info')
         this.showDialogInfo = true
     },
 
-    editBook(id) {
-      this.$router.push({ name: "EditBook", params: { id: id }})
+    editBook() {
+      console.log(this.book.id, 'this book')
+      this.$router.push({ name: "EditBook", params: { id: this.book.id }})
     }
   },
 

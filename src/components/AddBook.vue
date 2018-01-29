@@ -103,6 +103,35 @@ export default {
       DialogCustom
   },
 
+  mounted: function() {
+      console.log('mounted')
+      const id = this.$route.params.id
+      console.log(id, 'id')
+      if(id) {
+          const books = this.$store.state.books
+          const bookToEdit = books.filter((book) => {
+              return book.id == id
+          })
+
+          this.form = bookToEdit[0]
+
+        const findPos = function(book) {
+            if(book.id == bookToEdit[0].id) {
+                return index
+            }
+        }
+
+        const bookId = bookToEdit[0].id
+        console.log(bookId, 'bookId')
+
+          console.log(books.findIndex(elem => elem.id == bookId), 'pos no array')
+      }
+  },
+
+  created: function() {
+      console.log('created')
+  },
+
   methods: {
     validateBook() {
       this.sending = true;
