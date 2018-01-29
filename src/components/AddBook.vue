@@ -66,6 +66,10 @@
             </md-card>
         </form>
         <dialog-custom title='Sucesso!' content='Livro cadastrado com sucesso' button-secondary='Cadastrar mais' button-primary='Ver livros cadastrados' :status='showDialog' v-on:firstAction='goToList' v-on:secondAction='clearForm'></dialog-custom>
+
+            <md-snackbar md-position="center" :md-duration="3000" :md-active.sync="showSnackbar" md-persistent>
+                <span>Livro editado com sucesso. Você será redirecionado para a lista de livros.</span>
+            </md-snackbar>
     </main>
 </template>
 
@@ -77,6 +81,7 @@ export default {
     return {
       sending: false,
       showDialog: false,
+      showSnackbar: false,
 
       error: {
         title: {
@@ -109,7 +114,7 @@ export default {
   },
 
   mounted: function() {
-    const id = this.$route.params.id
+    const id = this.$route.params.id;
 
     if (id) {
       const books = this.$store.state.books;
@@ -127,8 +132,6 @@ export default {
 
       const bookId = bookToEdit[0].id;
       this.posBook = books.findIndex(elem => elem.id == bookId);
-
-      // this.$store.commit('UPDATE_BOOK', posBook, bookToEdit[0])
     }
   },
 
@@ -165,14 +168,15 @@ export default {
         return;
       }
 
-    const payload = {
+      const payload = {
         pos: this.posBook,
         obj: this.form
-    }
+      };
 
-    this.$store.commit('UPDATE_BOOK', payload)
-    
-    // console.log("this.form", this.form, payload, this.posBook);
+      this.$store.commit("UPDATE_BOOK", payload);
+      this.sending = false;
+      this.showSnackbar = true;
+      window.setTimeout(() => this.goToList(), 3000);
     },
 
     clearForm() {
