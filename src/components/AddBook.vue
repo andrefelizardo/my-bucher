@@ -3,8 +3,8 @@
         <form novalidate class="md-layout-row md-gutter" @submit.prevent="validateBook">
             <md-card class="md-flex-50 md-flex-small-100">
                 <md-card-header>
-                    <div class="md-title">Preencha os dados do livro</div>
-                    <span v-if="isEdit">To editando!</span>
+                    <div class="md-title" v-if="!isEdit">Preencha os dados do livro</div>
+                    <div class="md-title" v-else>Deseja mudar alguma informação do livro?</div>
                 </md-card-header>
 
                 <md-card-content>
@@ -57,7 +57,10 @@
                 <md-progress-bar md-mode="indeterminate" v-if="sending" />
 
                 <md-card-actions>
-                    <md-button type="submit" class="md-primary" :disabled="sending || !isValid">Adicionar livro</md-button>
+                    <md-button class="md-secondary" v-if="isEdit" @click="goToList">Cancelar</md-button>
+
+                    <md-button type="submit" class="md-primary" :disabled="sending || !isValid" v-if="!isEdit">Adicionar livro</md-button>
+                    <md-button type="submit" class="md-primary" :disabled="sending || !isValid" v-else>Editar livro</md-button>
                 </md-card-actions>
 
             </md-card>
@@ -67,7 +70,7 @@
 </template>
 
 <script>
-import DialogCustom from './Dialog'
+import DialogCustom from "./Dialog";
 
 export default {
   data() {
@@ -85,59 +88,56 @@ export default {
       },
 
       form: {
-        title: '',
-        author: '',
-        description: '',
-        category: '',
-        cover: '',
+        title: "",
+        author: "",
+        description: "",
+        category: "",
+        cover: "",
         loan: {
-            status: false,
-            friend: ''
+          status: false,
+          friend: ""
         },
         read: false
-      }
+      },
+
+      posBook: null
     };
   },
 
   components: {
-      DialogCustom
+    DialogCustom
   },
 
   mounted: function() {
-      console.log('mounted')
-      const id = this.$route.params.id
-      console.log(id, 'id')
-      if(id) {
-          const books = this.$store.state.books
-          const bookToEdit = books.filter((book) => {
-              return book.id == id
-          })
+    const id = this.$route.params.id
 
-          this.form = bookToEdit[0]
+    if (id) {
+      const books = this.$store.state.books;
+      const bookToEdit = books.filter(book => {
+        return book.id == id;
+      });
 
-        const findPos = function(book) {
-            if(book.id == bookToEdit[0].id) {
-                return index
-            }
+      this.form = bookToEdit[0];
+
+      const findPos = function(book) {
+        if (book.id == bookToEdit[0].id) {
+          return index;
         }
+      };
 
-        const bookId = bookToEdit[0].id
-        console.log(bookId, 'bookId')
+      const bookId = bookToEdit[0].id;
+      this.posBook = books.findIndex(elem => elem.id == bookId);
 
-          console.log(books.findIndex(elem => elem.id == bookId), 'pos no array')
-      }
-  },
-
-  created: function() {
-      console.log('created')
+      // this.$store.commit('UPDATE_BOOK', posBook, bookToEdit[0])
+    }
   },
 
   methods: {
     validateBook() {
       this.sending = true;
-      const errors = document.querySelectorAll('.md-invalid');
+      const errors = document.querySelectorAll(".md-invalid");
       for (let i = 0, total = errors.length; i < total; i++) {
-        errors[i].classList.remove('md-invalid');
+        errors[i].classList.remove("md-invalid");
       }
 
       if (this.form.title.length < 4) {
@@ -154,25 +154,37 @@ export default {
         this.error.author.minlength = false;
       }
 
-        this.registerBook()  
+      this.registerBook();
     },
 
     registerBook() {
-        this.$store.commit('ADD_BOOK', this.form);
+      if (!this.isEdit) {
+        this.$store.commit("ADD_BOOK", this.form);
         this.showDialog = true;
         this.sending = false;
+        return;
+      }
+
+    const payload = {
+        pos: this.posBook,
+        obj: this.form
+    }
+
+    this.$store.commit('UPDATE_BOOK', payload)
+    
+    // console.log("this.form", this.form, payload, this.posBook);
     },
 
     clearForm() {
       this.form = {
-        title: '',
-        author: '',
-        description: '',
-        category: '',
-        cover: '',
+        title: "",
+        author: "",
+        description: "",
+        category: "",
+        cover: "",
         loan: {
-            status: false,
-            friend: ''
+          status: false,
+          friend: ""
         },
         read: false
       };
@@ -181,21 +193,21 @@ export default {
     },
 
     goToList() {
-        this.$router.push('/')
+      this.$router.push("/");
     }
   },
 
   computed: {
     isValid: function() {
       return (
-        this.form.title !== '' &&
-        this.form.author !== '' &&
-        this.form.category !== ''
+        this.form.title !== "" &&
+        this.form.author !== "" &&
+        this.form.category !== ""
       );
     },
 
     isEdit: function() {
-        return this.$route.params.id
+      return this.$route.params.id;
     }
   }
 };

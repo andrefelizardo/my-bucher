@@ -23,7 +23,9 @@ export default new Vuex.Store({
       store.books[pos].loan.status = false
     },
     UPDATE_BOOK (store, obj) {
-      
+      const pos = obj.pos
+      const book = obj.obj
+      console.log(pos, book)
     }
   }
 })

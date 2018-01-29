@@ -169,12 +169,10 @@ export default {
 
     showInfo(index) {
         this.book = this.$store.state.books[index]
-        console.log(this.book.id, 'show info')
         this.showDialogInfo = true
     },
 
     editBook() {
-      console.log(this.book.id, 'this book')
       this.$router.push({ name: "EditBook", params: { id: this.book.id }})
     }
   },
