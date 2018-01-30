@@ -25,6 +25,14 @@
                             </md-field>
                         </div>
 
+                        <div class="md-flex md-flex-small-100" v-if="isEdit">
+                          <md-field v-if="form.loan.status" :class="{ 'md-invalid': error.loan.minlength }">
+                            <label for="friend">Emprestado para</label>
+                            <md-input name="friend" id="friend" v-model="form.loan.friend" required></md-input>
+                            <span class="md-error">Para devolver o livro, utilize a lista de livros</span>
+                          </md-field>
+                        </div>
+
                         <div class="md-flex md-flex-small-100">
                             <md-field>
                                 <label for="description">Descrição</label>
@@ -88,6 +96,9 @@ export default {
           minlength: false
         },
         author: {
+          minlength: false
+        },
+        loan: {
           minlength: false
         }
       },
@@ -155,6 +166,16 @@ export default {
         return;
       } else {
         this.error.author.minlength = false;
+      }
+
+      if(this.form.loan.status) {
+        if(this.form.loan.friend.length < 2) {
+          this.error.loan.minlength = true;
+          this.sending = false
+          return;
+        } else {
+          this.error.loan.minlength = false;
+        }
       }
 
       this.registerBook();
