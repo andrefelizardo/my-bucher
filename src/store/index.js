@@ -9,6 +9,9 @@ export default new Vuex.Store({
   },
   mutations: {
     ADD_BOOK (store, obj) {
+      const id = store.books.length + 1
+      obj.id = id
+
       store.books.push(obj)
     },
     LEND_BOOK (store, obj) {
@@ -18,6 +21,11 @@ export default new Vuex.Store({
     RETURN_BOOK (store, pos) {
       store.books[pos].loan.friend = null
       store.books[pos].loan.status = false
+    },
+    UPDATE_BOOK (store, obj) {
+      const pos = obj.pos
+      const book = obj.obj
+      store.books[pos] = book
     }
   }
 })

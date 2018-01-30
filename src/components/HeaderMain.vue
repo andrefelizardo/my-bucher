@@ -17,7 +17,7 @@
             </md-list-item>
           </router-link>
 
-          <router-link to="/add-book" @click.native="toggleMenu">
+          <router-link to="/book" @click.native="toggleMenu">
             <md-list-item>
               <md-icon>add</md-icon>
               <span class="md-list-item-text">Cadastrar livro</span>
