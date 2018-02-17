@@ -14,9 +14,9 @@ export default {
   props: ['icon', 'label', 'description', 'textButton'],
 
   methods: {
-      callToAction() {
-          this.$emit('goTo')
-      }
+    callToAction () {
+      this.$emit('goTo')
+    }
   }
 }
 </script>

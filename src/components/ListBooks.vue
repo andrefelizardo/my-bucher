@@ -95,11 +95,11 @@ import DialogCustom from './Dialog'
 export default {
   name: 'ListBooks',
 
-  data() {
+  data () {
     return {
       books: this.$store.state.books,
 
-    book: null,
+      book: null,
       selectedBook: null,
       textSearch: null,
       contentLoan: null,
@@ -107,73 +107,72 @@ export default {
       showDialog: false,
       showDialogInfo: false,
       showSnackbar: false
-    };
+    }
   },
 
   methods: {
-    searchBooks: function() {
+    searchBooks: function () {
       const text = this.textSearch.toLowerCase()
-      const books = this.books
       const allBooks = this.allBooks
 
       const newBooks = allBooks.filter(
         book =>
           book.title.toLowerCase().includes(text) ||
           book.author.toLowerCase().includes(text)
-      );
+      )
 
       this.books = newBooks
     },
 
-    goToAddBook: function() {
-      this.$router.push("book")
+    goToAddBook: function () {
+      this.$router.push('book')
     },
 
-    openDialogPrompt(index) {
-        this.selectedBook = index
-        this.openPrompt = true
+    openDialogPrompt (index) {
+      this.selectedBook = index
+      this.openPrompt = true
     },
 
-    lendBook(name) {
-        const loan = {
-            friend: name,
-            pos: this.selectedBook
-        }
+    lendBook (name) {
+      const loan = {
+        friend: name,
+        pos: this.selectedBook
+      }
 
-        this.$store.commit('LEND_BOOK', loan)
+      this.$store.commit('LEND_BOOK', loan)
 
-        this.closePrompt()
+      this.closePrompt()
     },
 
-    openLoanData(index) {
-        this.showDialog = true
-        this.selectedBook = index
-        const friendName = this.allBooks[index].loan.friend
-        this.contentLoan = `Livro emprestado para ${friendName}.`
+    openLoanData (index) {
+      this.showDialog = true
+      this.selectedBook = index
+      const friendName = this.allBooks[index].loan.friend
+      this.contentLoan = `Livro emprestado para ${friendName}.`
     },
 
-    closeLoanData() {
-        this.showDialog = false
+    closeLoanData () {
+      this.showDialog = false
     },
 
-    closePrompt() {
-        this.openPrompt = false
+    closePrompt () {
+      this.openPrompt = false
     },
 
-    returnBook() {
-        this.$store.commit('RETURN_BOOK', this.selectedBook)
-        this.showSnackbar = true
+    returnBook () {
+      this.$store.commit('RETURN_BOOK', this.selectedBook)
+      this.showSnackbar = true
 
-        this.closeLoanData()
+      this.closeLoanData()
     },
 
-    showInfo(index) {
-        this.book = this.$store.state.books[index]
-        this.showDialogInfo = true
+    showInfo (index) {
+      this.book = this.$store.state.books[index]
+      this.showDialogInfo = true
     },
 
-    editBook() {
-      this.$router.push({ name: "EditBook", params: { id: this.book.id }})
+    editBook () {
+      this.$router.push({ name: 'EditBook', params: { id: this.book.id } })
     }
   },
 
@@ -184,21 +183,21 @@ export default {
   },
 
   computed: {
-    allBooks() {
+    allBooks () {
       return this.$store.state.books
     }
   }
-};
+}
 </script>
 
 <style scoped>
 .md-card-media-cover {
-    min-height: 400px;
+  min-height: 400px;
 }
 .md-layout-item {
-    margin-bottom: 2em;
+  margin-bottom: 2em;
 }
 .md-card-area.area-custom {
-    background: rgba(0, 0, 0, .75)!important;
+  background: rgba(0, 0, 0, 0.75) !important;
 }
 </style>

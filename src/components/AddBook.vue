@@ -82,10 +82,10 @@
 </template>
 
 <script>
-import DialogCustom from "./Dialog";
+import DialogCustom from './Dialog'
 
 export default {
-  data() {
+  data () {
     return {
       sending: false,
       showDialog: false,
@@ -104,136 +104,130 @@ export default {
       },
 
       form: {
-        title: "",
-        author: "",
-        description: "",
-        category: "",
-        cover: "",
+        title: '',
+        author: '',
+        description: '',
+        category: '',
+        cover: '',
         loan: {
           status: false,
-          friend: ""
+          friend: ''
         },
         read: false
       },
 
       posBook: null
-    };
+    }
   },
 
   components: {
     DialogCustom
   },
 
-  mounted: function() {
-    const id = this.$route.params.id;
+  mounted: function () {
+    const id = this.$route.params.id
 
     if (id) {
-      const books = this.$store.state.books;
+      const books = this.$store.state.books
       const bookToEdit = books.filter(book => {
-        return book.id == id;
-      });
+        return book.id === id
+      })
 
-      this.form = bookToEdit[0];
+      this.form = bookToEdit[0]
 
-      const findPos = function(book) {
-        if (book.id == bookToEdit[0].id) {
-          return index;
-        }
-      };
-
-      const bookId = bookToEdit[0].id;
-      this.posBook = books.findIndex(elem => elem.id == bookId);
+      const bookId = bookToEdit[0].id
+      this.posBook = books.findIndex(elem => elem.id === bookId)
     }
   },
 
   methods: {
-    validateBook() {
-      this.sending = true;
-      const errors = document.querySelectorAll(".md-invalid");
+    validateBook () {
+      this.sending = true
+      const errors = document.querySelectorAll('.md-invalid')
       for (let i = 0, total = errors.length; i < total; i++) {
-        errors[i].classList.remove("md-invalid");
+        errors[i].classList.remove('md-invalid')
       }
 
       if (this.form.title.length < 4) {
-        this.error.title.minlength = true;
-        return;
+        this.error.title.minlength = true
+        return
       } else {
-        this.error.title.minlength = false;
+        this.error.title.minlength = false
       }
 
       if (this.form.author.length < 4) {
-        this.error.author.minlength = true;
-        return;
+        this.error.author.minlength = true
+        return
       } else {
-        this.error.author.minlength = false;
+        this.error.author.minlength = false
       }
 
-      if(this.form.loan.status) {
-        if(this.form.loan.friend.length < 2) {
-          this.error.loan.minlength = true;
+      if (this.form.loan.status) {
+        if (this.form.loan.friend.length < 2) {
+          this.error.loan.minlength = true
           this.sending = false
-          return;
+          return
         } else {
-          this.error.loan.minlength = false;
+          this.error.loan.minlength = false
         }
       }
 
-      this.registerBook();
+      this.registerBook()
     },
 
-    registerBook() {
+    registerBook () {
       if (!this.isEdit) {
-        this.$store.commit("ADD_BOOK", this.form);
-        this.showDialog = true;
-        this.sending = false;
-        return;
+        this.$store.commit('ADD_BOOK', this.form)
+        this.showDialog = true
+        this.sending = false
+        return
       }
 
       const payload = {
         pos: this.posBook,
         obj: this.form
-      };
+      }
 
-      this.$store.commit("UPDATE_BOOK", payload);
-      this.sending = false;
-      this.showSnackbar = true;
-      window.setTimeout(() => this.goToList(), 3000);
+      this.$store.commit('UPDATE_BOOK', payload)
+      this.sending = false
+      this.showSnackbar = true
+      window.setTimeout(() => this.goToList(), 3000)
     },
 
-    clearForm() {
+    clearForm () {
       this.form = {
-        title: "",
-        author: "",
-        description: "",
-        category: "",
-        cover: "",
+        title: '',
+        author: '',
+        description: '',
+        category: '',
+        cover: '',
         loan: {
           status: false,
-          friend: ""
+          friend: ''
         },
         read: false
-      };
+      }
 
-      this.showDialog = false;
+      this.showDialog = false
     },
 
-    goToList() {
-      this.$router.push("/");
+    goToList () {
+      this.$router.push('/')
     }
   },
 
   computed: {
-    isValid: function() {
+    isValid: function () {
       return (
-        this.form.title !== "" &&
-        this.form.author !== "" &&
-        this.form.category !== ""
-      );
+        this.form.title !== '' &&
+        this.form.author !== '' &&
+        this.form.category !== ''
+      )
     },
 
-    isEdit: function() {
-      return this.$route.params.id;
+    isEdit: function () {
+      return this.$route.params.id
     }
   }
-};
+}
 </script>
