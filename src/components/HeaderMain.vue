@@ -33,16 +33,16 @@
 export default {
   name: 'HeaderMain',
 
-  data() {
-      return {
-          showNavigation: false
-      }
+  data () {
+    return {
+      showNavigation: false
+    }
   },
 
   methods: {
-    toggleMenu: function() {
+    toggleMenu: function () {
       this.showNavigation = !this.showNavigation
     }
   }
-};
+}
 </script>

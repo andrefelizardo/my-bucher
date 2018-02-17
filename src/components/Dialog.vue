@@ -11,18 +11,17 @@
 
 <script>
 export default {
-  name: "Dialog",
-
-  props: ["title", "content", "buttonPrimary", "buttonSecondary", "status"],
+  name: 'Dialog',
+  props: ['title', 'content', 'buttonPrimary', 'buttonSecondary', 'status'],
 
   methods: {
-    buttonPrimaryAction() {
-      this.$emit("firstAction")
+    buttonPrimaryAction () {
+      this.$emit('firstAction')
     },
 
-    buttonSecondaryAction() {
-      this.$emit("secondAction")
+    buttonSecondaryAction () {
+      this.$emit('secondAction')
     }
   }
-};
+}
 </script>

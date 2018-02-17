@@ -15,12 +15,12 @@ export default {
     HeaderMain
   },
 
-  data() {
+  data () {
     return {}
   },
 
   methods: {}
-};
+}
 </script>
 
 <style>
