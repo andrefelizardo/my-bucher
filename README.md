@@ -6,7 +6,9 @@
 
 I've been reading a lot of books for a few years now. While I was studying Vue.js, I came up with the idea of creating a small Web App to manage my books, if I have read it, and if it is being loaned to someone else.
 
-**Main objective was to study Vue.js.**
+**Main objective was to study Vue.js and Node.js.**
+
+The API in Node.js is in the API folder.
 
 ## Build Setup
 
