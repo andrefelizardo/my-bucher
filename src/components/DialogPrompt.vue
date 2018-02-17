@@ -16,22 +16,22 @@ export default {
 
   props: ['title', 'maxLength', 'placeholder', 'confirmText', 'status'],
 
-  data() {
-      return {
-          value: null
-      }
+  data () {
+    return {
+      value: null
+    }
   },
 
   methods: {
-      confirmAction() {
-          this.$emit('confirmPrompt', this.value)
-          this.value = null
-      },
+    confirmAction () {
+      this.$emit('confirmPrompt', this.value)
+      this.value = null
+    },
 
-      cancelAction() {
-          this.value = null
-          this.$emit('cancelPrompt')
-      }
+    cancelAction () {
+      this.value = null
+      this.$emit('cancelPrompt')
+    }
   }
 }
 </script>
