@@ -83,6 +83,7 @@
 
 <script>
 import DialogCustom from './Dialog'
+import Loader from './Loader'
 
 export default {
   data () {
@@ -121,7 +122,8 @@ export default {
   },
 
   components: {
-    DialogCustom
+    DialogCustom,
+    Loader
   },
 
   mounted: function () {
