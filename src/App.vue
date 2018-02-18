@@ -1,18 +1,21 @@
 <template>
   <div id="app">
-    <header-main></header-main>
+    <header-main/>
     <router-view/>
+    <loader/>
   </div>
 </template>
 
 <script>
 import HeaderMain from '@/components/HeaderMain'
+import Loader from '@/components/Loader'
 
 export default {
   name: 'app',
 
   components: {
-    HeaderMain
+    HeaderMain,
+    Loader
   },
 
   data () {
