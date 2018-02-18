@@ -95,6 +95,10 @@ import DialogCustom from './Dialog'
 export default {
   name: 'ListBooks',
 
+  mounted () {
+    this.$store.dispatch('LOAD_BOOKS')
+  },
+
   data () {
     return {
       books: this.$store.state.books,
