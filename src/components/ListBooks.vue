@@ -177,6 +177,10 @@ export default {
 
     editBook () {
       this.$router.push({ name: 'EditBook', params: { id: this.book.id } })
+    },
+
+    updateBooks () {
+      this.books = this.$store.state.books
     }
   },
 
@@ -188,6 +192,7 @@ export default {
 
   computed: {
     allBooks () {
+      this.updateBooks()
       return this.$store.state.books
     }
   }
