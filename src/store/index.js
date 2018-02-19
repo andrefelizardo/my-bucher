@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'Vuex'
 import config from '../../config-front'
+import axios from 'axios'
 const api = config.api
 
 Vue.use(Vuex)
@@ -52,6 +53,21 @@ export default new Vuex.Store({
       .catch((error) => {
         console.error('Falha em carregar os livros: ', error)
         commit('SET_LOADING', false)
+      })
+    },
+    ADD_BOOK_DB: function ({ commit }, book) {
+      commit('SET_LOADING', true)
+      axios.post(`${api}/books`, {
+        title: book.title,
+        author: book.author,
+        category: book.category,
+        cover: book.cover
+      })
+      .then(function (response) {
+        console.log(response)
+      })
+      .catch(function (error) {
+        console.log(error)
       })
     }
   }

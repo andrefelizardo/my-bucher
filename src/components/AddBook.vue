@@ -111,10 +111,10 @@ export default {
         category: '',
         cover: '',
         loan: {
-          status: false,
+          status: '',
           friend: ''
         },
-        read: false
+        read: ''
       },
 
       posBook: null
@@ -180,6 +180,7 @@ export default {
     registerBook () {
       if (!this.isEdit) {
         this.$store.commit('ADD_BOOK', this.form)
+        this.$store.dispatch('ADD_BOOK_DB', this.form)
         this.showDialog = true
         this.sending = false
         return
@@ -204,10 +205,10 @@ export default {
         category: '',
         cover: '',
         loan: {
-          status: false,
+          status: '',
           friend: ''
         },
-        read: false
+        read: ''
       }
 
       this.showDialog = false
