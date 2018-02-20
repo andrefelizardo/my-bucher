@@ -41,7 +41,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    LOAD_BOOKS: function ({ commit }) {
+    LOAD_BOOKS_DB ({ commit }) {
       commit('SET_LOADING', true)
       fetch(`${api}/books`)
       .then((response) => {
@@ -55,19 +55,22 @@ export default new Vuex.Store({
         commit('SET_LOADING', false)
       })
     },
-    ADD_BOOK_DB: function ({ commit }, book) {
-      commit('SET_LOADING', true)
-      axios.post(`${api}/books`, {
-        title: book.title,
-        author: book.author,
-        category: book.category,
-        cover: book.cover
-      })
-      .then(function (response) {
-        console.log(response)
-      })
-      .catch(function (error) {
-        console.log(error)
+    ADD_BOOK_DB ({ commit }, book) {
+      return new Promise((resolve, reject) => {
+        commit('SET_LOADING', true)
+        axios.post(`${api}/books`, {
+          title: book.title,
+          author: book.author,
+          category: book.category,
+          cover: book.cover
+        })
+        .then(function (response) {
+          resolve(response)
+        })
+        .catch(function (error) {
+          commit('SET_LOADING', false)
+          reject(error)
+        })
       })
     }
   }
