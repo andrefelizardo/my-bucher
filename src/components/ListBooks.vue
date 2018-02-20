@@ -96,7 +96,7 @@ export default {
   name: 'ListBooks',
 
   mounted () {
-    this.$store.dispatch('LOAD_BOOKS')
+    this.$store.dispatch('LOAD_BOOKS_DB')
   },
 
   data () {
