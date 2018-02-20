@@ -76,7 +76,7 @@
         <dialog-custom title='Sucesso!' content='Livro cadastrado com sucesso' button-secondary='Cadastrar mais' button-primary='Ver livros cadastrados' :status='showDialog' v-on:firstAction='goToList' v-on:secondAction='clearForm'></dialog-custom>
 
             <md-snackbar md-position="center" :md-duration="3000" :md-active.sync="showSnackbar" md-persistent>
-                <span>Livro editado com sucesso. Você será redirecionado para a lista de livros.</span>
+                <span>{{snackText}}</span>
             </md-snackbar>
     </main>
 </template>
@@ -91,6 +91,7 @@ export default {
       sending: false,
       showDialog: false,
       showSnackbar: false,
+      snackText: 'Livro editado com sucesso. Você será redirecionado para a lista de livros.',
 
       error: {
         title: {
@@ -179,10 +180,16 @@ export default {
 
     registerBook () {
       if (!this.isEdit) {
-        this.$store.commit('ADD_BOOK', this.form)
-        this.$store.dispatch('ADD_BOOK_DB', this.form)
-        this.showDialog = true
-        this.sending = false
+        this.$store.dispatch('ADD_BOOK_DB', this.form).then(response => {
+          this.showDialog = true
+          this.sending = false
+        }, error => {
+          this.snackText = 'Erro ao cadastrar livro. Tente novamente mais tarde.'
+          this.sending = false
+          if (error) {
+            console.error('Erro ao cadastrar livro: ', error)
+          }
+        })
         return
       }
 
@@ -190,6 +197,8 @@ export default {
         pos: this.posBook,
         obj: this.form
       }
+
+      console.log('passei aqui mesmo assim')
 
       this.$store.commit('UPDATE_BOOK', payload)
       this.sending = false
