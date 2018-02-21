@@ -72,6 +72,11 @@ export default new Vuex.Store({
           reject(error)
         })
       })
+    },
+    UPDATE_BOOK_DB ({ commit }, data) {
+      return new Promise((resolve, reject) => {
+        commit('SET_LOADING', true)
+      })
     }
   }
 })

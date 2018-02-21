@@ -91,7 +91,7 @@ export default {
       sending: false,
       showDialog: false,
       showSnackbar: false,
-      snackText: 'Livro editado com sucesso. Você será redirecionado para a lista de livros.',
+      snackText: null,
 
       error: {
         title: {
@@ -133,13 +133,13 @@ export default {
     if (id) {
       const books = this.$store.state.books
       const bookToEdit = books.filter(book => {
-        return book.id === id
+        return book._id === id
       })
 
       this.form = bookToEdit[0]
 
-      const bookId = bookToEdit[0].id
-      this.posBook = books.findIndex(elem => elem.id === bookId)
+      const bookId = bookToEdit[0]._id
+      this.posBook = books.findIndex(elem => elem._id === bookId)
     }
   },
 
@@ -192,20 +192,21 @@ export default {
         })
         return
       }
-
       const payload = {
         pos: this.posBook,
         obj: this.form
       }
+      this.$store.dispatch('UPDATE_BOOK_DB', this.form).then(response => {
+        
+      }, error => {
 
-      console.log('passei aqui mesmo assim')
-
-      this.$store.commit('UPDATE_BOOK', payload)
+      })
+      // this.$store.commit('UPDATE_BOOK', payload)
       this.sending = false
-      this.showSnackbar = true
+      // this.snackText = 'Livro editado com sucesso. Você será redirecionado para a lista de livros.'
+      // this.showSnackbar = true
       window.setTimeout(() => this.goToList(), 3000)
     },
-
     clearForm () {
       this.form = {
         title: '',
