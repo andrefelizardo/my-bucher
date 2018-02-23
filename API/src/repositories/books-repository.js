@@ -10,3 +10,15 @@ exports.get = async () => {
   const res = await Book.find({})
   return res
 }
+
+exports.update = async (id, data) => {
+  await Book.findByIdAndUpdate(id, {
+    $set: {
+      title: data.title,
+      author: data.author,
+      description: data.description,
+      category: data.category,
+      cover: data.cover
+    }
+  })
+}
