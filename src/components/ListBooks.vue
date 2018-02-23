@@ -27,7 +27,7 @@
                                 <md-card-content>{{ book.description }}</md-card-content>
 
                                 <md-card-actions md-alignment="space-between">
-                                    <md-button v-if="!book.loan.status" @click="openDialogPrompt(index)">Emprestar</md-button>
+                                    <md-button v-if="!book.loan.status" @click="openDialogPrompt(book._id)">Emprestar</md-button>
                                     <md-button v-else @click="openLoanData(index)">Emprestado</md-button>
 
                                     <div>
@@ -80,7 +80,7 @@
             </md-dialog>
 
             <md-snackbar md-position="center" :md-duration="4000" :md-active.sync="showSnackbar" md-persistent>
-                <span>Livro devolvido com sucesso. Que amigo legal você tem!</span>
+                <span>{{snackText}}</span>
             </md-snackbar>
         </div>
       </main>
@@ -110,6 +110,7 @@ export default {
       openPrompt: false,
       showDialog: false,
       showDialogInfo: false,
+      snackText: 'Livro devolvido com sucesso. Que amigo legal você tem!',
       showSnackbar: false
     }
   },
@@ -132,18 +133,29 @@ export default {
       this.$router.push('book')
     },
 
-    openDialogPrompt (index) {
-      this.selectedBook = index
+    openDialogPrompt (id) {
+      this.selectedBook = id
       this.openPrompt = true
     },
 
     lendBook (name) {
       const loan = {
         friend: name,
-        pos: this.selectedBook
+        id: this.selectedBook
       }
 
-      this.$store.commit('LEND_BOOK', loan)
+      // this.$store.commit('LEND_BOOK', loan)
+      this.$store.dispatch('LEND_BOOK_DB', loan)
+      .then(response => {
+        this.snackText = `Livro emprestado para ${loan.name}`
+        this.showSnackbar = true
+        this.closePrompt()
+      }, error => {
+        console.log(error)
+        this.snackText = 'Erro ao emprestar livro. Tente novamente mais tarde.'
+        this.showSnackbar = true
+        this.closePrompt()
+      })
 
       this.closePrompt()
     },

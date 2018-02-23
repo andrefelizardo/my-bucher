@@ -90,6 +90,23 @@ export default new Vuex.Store({
           reject(error)
         })
       })
+    },
+    LEND_BOOK_DB ({ commit }, loan) {
+      return new Promise((resolve, reject) => {
+        commit('SET_LOADING', true)
+        axios.put(`${api}/books/loan/${loan.id}`, {
+          loan: {
+            status: true,
+            friend: loan.name
+          }
+        })
+        .then((response) => {
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+      })
     }
   }
 })
