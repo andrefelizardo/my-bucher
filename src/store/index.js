@@ -64,18 +64,31 @@ export default new Vuex.Store({
           category: book.category,
           cover: book.cover
         })
-        .then(function (response) {
+        .then((response) => {
           resolve(response)
         })
-        .catch(function (error) {
+        .catch((error) => {
           commit('SET_LOADING', false)
           reject(error)
         })
       })
     },
-    UPDATE_BOOK_DB ({ commit }, data) {
+    UPDATE_BOOK_DB ({ commit }, book) {
       return new Promise((resolve, reject) => {
         commit('SET_LOADING', true)
+        axios.put(`${api}/books/${book._id}`, {
+          title: book.title,
+          author: book.author,
+          category: book.category,
+          cover: book.cover
+        })
+        .then((response) => {
+          resolve(response)
+        })
+        .catch((error) => {
+          commit('SET_LOADING', false)
+          reject(error)
+        })
       })
     }
   }

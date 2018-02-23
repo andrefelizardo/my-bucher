@@ -91,7 +91,7 @@ export default {
       sending: false,
       showDialog: false,
       showSnackbar: false,
-      snackText: null,
+      snackText: 'Livro editado com sucesso. Você será redirecionado para a lista de livros.',
 
       error: {
         title: {
@@ -192,21 +192,21 @@ export default {
         })
         return
       }
-      const payload = {
-        pos: this.posBook,
-        obj: this.form
-      }
-      this.$store.dispatch('UPDATE_BOOK_DB', this.form).then(response => {
-        
-      }, error => {
 
+      this.$store.dispatch('UPDATE_BOOK_DB', this.form).then(response => {
+        this.sending = false
+        this.snackText = 'Livro editado com sucesso. Você será redirecionado para a lista de livros.'
+        this.showSnackbar = true
+        window.setTimeout(() => this.goToList(), 3000)
+      }, error => {
+        this.sending = false
+        console.log(error)
+        this.snackText = 'Erro ao editar livro. Tente novamente mais tarde.'
+        this.showSnackbar = true
+        window.setTimeout(() => this.goToList(), 3000)
       })
-      // this.$store.commit('UPDATE_BOOK', payload)
-      this.sending = false
-      // this.snackText = 'Livro editado com sucesso. Você será redirecionado para a lista de livros.'
-      // this.showSnackbar = true
-      window.setTimeout(() => this.goToList(), 3000)
     },
+
     clearForm () {
       this.form = {
         title: '',

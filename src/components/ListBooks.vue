@@ -176,7 +176,6 @@ export default {
     },
 
     editBook () {
-      console.log(this.book._id, 'id do livro')
       this.$router.push({ name: 'EditBook', params: { id: this.book._id } })
     },
 
