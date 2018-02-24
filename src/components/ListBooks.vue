@@ -27,16 +27,15 @@
                                 <md-card-content>{{ book.description }}</md-card-content>
 
                                 <md-card-actions md-alignment="space-between">
-                                    <md-button v-if="!book.loan.status" @click="openDialogPrompt(index)">Emprestar</md-button>
-                                    <md-button v-else @click="openLoanData(index)">Emprestado</md-button>
-
+                                    <md-button v-if="!book.loan.status" @click="openDialogPrompt(book._id)">Emprestar</md-button>
+                                    <md-button v-else @click="openLoanData(book._id, index)">Emprestado</md-button>
                                     <div>
 
-                                        <md-button class="md-icon-button" v-if="!book.read" @click="book.read = !book.read">
+                                        <md-button class="md-icon-button" v-if="!book.read" @click="(book.read = !book.read, readBook(book._id, book.read))">
                                             <md-tooltip md-direction="top">Marcar livro como lido</md-tooltip>
                                             <md-icon>check_box_outline_blank</md-icon>
                                         </md-button>
-                                        <md-button class="md-icon-button" v-else @click="book.read = !book.read">
+                                        <md-button class="md-icon-button" v-else @click="(book.read = !book.read, readBook(book._id, book.read))">
                                             <md-tooltip md-direction="top">Desmarcar livro como lido</md-tooltip>
                                             <md-icon>check_box</md-icon>
                                         </md-button>
@@ -80,7 +79,7 @@
             </md-dialog>
 
             <md-snackbar md-position="center" :md-duration="4000" :md-active.sync="showSnackbar" md-persistent>
-                <span>Livro devolvido com sucesso. Que amigo legal você tem!</span>
+                <span>{{snackText}}</span>
             </md-snackbar>
         </div>
       </main>
@@ -105,11 +104,13 @@ export default {
 
       book: null,
       selectedBook: null,
+      indexBook: null,
       textSearch: null,
       contentLoan: null,
       openPrompt: false,
       showDialog: false,
       showDialogInfo: false,
+      snackText: null,
       showSnackbar: false
     }
   },
@@ -132,25 +133,38 @@ export default {
       this.$router.push('book')
     },
 
-    openDialogPrompt (index) {
-      this.selectedBook = index
+    openDialogPrompt (id) {
+      this.selectedBook = id
       this.openPrompt = true
     },
 
     lendBook (name) {
       const loan = {
         friend: name,
-        pos: this.selectedBook
+        status: true,
+        id: this.selectedBook
       }
 
-      this.$store.commit('LEND_BOOK', loan)
+      this.$store.dispatch('LEND_BOOK_DB', loan)
+      .then(response => {
+        this.$store.commit('LEND_BOOK', loan)
+        this.snackText = `Livro emprestado para ${loan.friend}`
+        this.showSnackbar = true
+        this.closePrompt()
+      }, error => {
+        console.log(error)
+        this.snackText = 'Erro ao emprestar livro. Tente novamente mais tarde.'
+        this.showSnackbar = true
+        this.closePrompt()
+      })
 
       this.closePrompt()
     },
 
-    openLoanData (index) {
+    openLoanData (id, index) {
       this.showDialog = true
-      this.selectedBook = index
+      this.selectedBook = id
+      this.indexBook = index
       const friendName = this.allBooks[index].loan.friend
       this.contentLoan = `Livro emprestado para ${friendName}.`
     },
@@ -164,10 +178,23 @@ export default {
     },
 
     returnBook () {
-      this.$store.commit('RETURN_BOOK', this.selectedBook)
-      this.showSnackbar = true
-
-      this.closeLoanData()
+      const loan = {
+        name: null,
+        status: false,
+        id: this.selectedBook
+      }
+      this.$store.dispatch('LEND_BOOK_DB', loan)
+      .then(response => {
+        this.$store.commit('RETURN_BOOK', this.indexBook)
+        this.snackText = 'Livro devolvido com sucesso. Que amigo legal você tem!'
+        this.showSnackbar = true
+        this.closeLoanData()
+      }, error => {
+        console.log(error)
+        this.snackText = 'Erro ao devolver livro, tente novamente mais tarde.'
+        this.showSnackbar = true
+        this.closeLoanData()
+      })
     },
 
     showInfo (index) {
@@ -181,6 +208,14 @@ export default {
 
     updateBooks () {
       this.books = this.$store.state.books
+    },
+
+    readBook (id, status) {
+      const obj = {
+        id: id,
+        status: status
+      }
+      this.$store.dispatch('MARK_READ', obj)
     }
   },
 

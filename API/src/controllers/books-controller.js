@@ -47,3 +47,29 @@ exports.put = async (req, res, next) => {
     })
   }
 }
+
+exports.putLoan = async (req, res, next) => {
+  try {
+    await repository.loan(req.params.id, req.body)
+    res.status(200).send({
+      message: 'Livro emprestado com sucesso.'
+    })
+  } catch (error) {
+    res.status(500).send({
+      message: `Falha ao processar sua requisição: ${error}`
+    })
+  }
+}
+
+exports.putRead = async (req, res, next) => {
+  try {
+    await repository.read(req.params.id, req.body.status)
+    res.status(200).send({
+      message: 'Status do livro alterado com sucesso.'
+    })
+  } catch (error) {
+    res.status(500).send({
+      message: `Falha ao processar sua requisição: ${error}`
+    })
+  }
+}

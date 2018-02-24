@@ -18,7 +18,24 @@ exports.update = async (id, data) => {
       author: data.author,
       description: data.description,
       category: data.category,
-      cover: data.cover
+      cover: data.cover,
+      loan: data.loan
+    }
+  })
+}
+
+exports.loan = async (id, data) => {
+  await Book.findByIdAndUpdate(id, {
+    $set: {
+      loan: data.loan
+    }
+  })
+}
+
+exports.read = async (id, status) => {
+  await Book.findByIdAndUpdate(id, {
+    $set: {
+      read: status
     }
   })
 }
