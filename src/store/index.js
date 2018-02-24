@@ -32,8 +32,6 @@ export default new Vuex.Store({
           }
         }
       }
-      // store.books[obj.pos].loan.friend = obj.friend
-      // store.books[obj.pos].loan.status = true
     },
     RETURN_BOOK (store, pos) {
       store.books[pos].loan.friend = null
@@ -56,7 +54,6 @@ export default new Vuex.Store({
         response.json().then((data) => {
           commit('GET_BOOKS_DB', data)
           commit('SET_LOADING', false)
-          console.log(data)
         })
       })
       .catch((error) => {
@@ -118,6 +115,22 @@ export default new Vuex.Store({
         .catch((error) => {
           commit('SET_LOADING', false)
           reject(error)
+        })
+      })
+    },
+    MARK_READ ({ commit }, obj) {
+      return new Promise((resolve, reject) => {
+        commit('SET_LOADING', true)
+        axios.put(`${api}/books/read/${obj.id}`, {
+          status: obj.status
+        })
+        .then((response) => {
+          resolve(response)
+          commit('SET_LOADING', false)
+        })
+        .catch((error) => {
+          reject(error)
+          commit('SET_LOADING', false)
         })
       })
     }

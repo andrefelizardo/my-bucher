@@ -29,14 +29,13 @@
                                 <md-card-actions md-alignment="space-between">
                                     <md-button v-if="!book.loan.status" @click="openDialogPrompt(book._id)">Emprestar</md-button>
                                     <md-button v-else @click="openLoanData(book._id, index)">Emprestado</md-button>
-{{book.loan.status}}
                                     <div>
 
-                                        <md-button class="md-icon-button" v-if="!book.read" @click="book.read = !book.read">
+                                        <md-button class="md-icon-button" v-if="!book.read" @click="(book.read = !book.read, readBook(book._id, book.read))">
                                             <md-tooltip md-direction="top">Marcar livro como lido</md-tooltip>
                                             <md-icon>check_box_outline_blank</md-icon>
                                         </md-button>
-                                        <md-button class="md-icon-button" v-else @click="book.read = !book.read">
+                                        <md-button class="md-icon-button" v-else @click="(book.read = !book.read, readBook(book._id, book.read))">
                                             <md-tooltip md-direction="top">Desmarcar livro como lido</md-tooltip>
                                             <md-icon>check_box</md-icon>
                                         </md-button>
@@ -209,6 +208,14 @@ export default {
 
     updateBooks () {
       this.books = this.$store.state.books
+    },
+
+    readBook (id, status) {
+      const obj = {
+        id: id,
+        status: status
+      }
+      this.$store.dispatch('MARK_READ', obj)
     }
   },
 

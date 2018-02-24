@@ -31,3 +31,11 @@ exports.loan = async (id, data) => {
     }
   })
 }
+
+exports.read = async (id, status) => {
+  await Book.findByIdAndUpdate(id, {
+    $set: {
+      read: status
+    }
+  })
+}
