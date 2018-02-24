@@ -28,8 +28,8 @@
 
                                 <md-card-actions md-alignment="space-between">
                                     <md-button v-if="!book.loan.status" @click="openDialogPrompt(book._id)">Emprestar</md-button>
-                                    <md-button v-else @click="openLoanData(index)">Emprestado</md-button>
-
+                                    <md-button v-else @click="openLoanData(book._id, index)">Emprestado</md-button>
+{{book.loan.status}}
                                     <div>
 
                                         <md-button class="md-icon-button" v-if="!book.read" @click="book.read = !book.read">
@@ -105,12 +105,13 @@ export default {
 
       book: null,
       selectedBook: null,
+      indexBook: null,
       textSearch: null,
       contentLoan: null,
       openPrompt: false,
       showDialog: false,
       showDialogInfo: false,
-      snackText: 'Livro devolvido com sucesso. Que amigo legal você tem!',
+      snackText: null,
       showSnackbar: false
     }
   },
@@ -141,13 +142,14 @@ export default {
     lendBook (name) {
       const loan = {
         friend: name,
+        status: true,
         id: this.selectedBook
       }
 
-      // this.$store.commit('LEND_BOOK', loan)
       this.$store.dispatch('LEND_BOOK_DB', loan)
       .then(response => {
-        this.snackText = `Livro emprestado para ${loan.name}`
+        this.$store.commit('LEND_BOOK', loan)
+        this.snackText = `Livro emprestado para ${loan.friend}`
         this.showSnackbar = true
         this.closePrompt()
       }, error => {
@@ -160,9 +162,10 @@ export default {
       this.closePrompt()
     },
 
-    openLoanData (index) {
+    openLoanData (id, index) {
       this.showDialog = true
-      this.selectedBook = index
+      this.selectedBook = id
+      this.indexBook = index
       const friendName = this.allBooks[index].loan.friend
       this.contentLoan = `Livro emprestado para ${friendName}.`
     },
@@ -176,10 +179,23 @@ export default {
     },
 
     returnBook () {
-      this.$store.commit('RETURN_BOOK', this.selectedBook)
-      this.showSnackbar = true
-
-      this.closeLoanData()
+      const loan = {
+        name: null,
+        status: false,
+        id: this.selectedBook
+      }
+      this.$store.dispatch('LEND_BOOK_DB', loan)
+      .then(response => {
+        this.$store.commit('RETURN_BOOK', this.indexBook)
+        this.snackText = 'Livro devolvido com sucesso. Que amigo legal você tem!'
+        this.showSnackbar = true
+        this.closeLoanData()
+      }, error => {
+        console.log(error)
+        this.snackText = 'Erro ao devolver livro, tente novamente mais tarde.'
+        this.showSnackbar = true
+        this.closeLoanData()
+      })
     },
 
     showInfo (index) {

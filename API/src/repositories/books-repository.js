@@ -18,7 +18,8 @@ exports.update = async (id, data) => {
       author: data.author,
       description: data.description,
       category: data.category,
-      cover: data.cover
+      cover: data.cover,
+      loan: data.loan
     }
   })
 }

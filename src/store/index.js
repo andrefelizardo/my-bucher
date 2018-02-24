@@ -24,8 +24,16 @@ export default new Vuex.Store({
       }
     },
     LEND_BOOK (store, obj) {
-      store.books[obj.pos].loan.friend = obj.friend
-      store.books[obj.pos].loan.status = true
+      for (let i = 0, total = store.books.length; i < total; i++) {
+        if (store.books[i]._id === obj.id) {
+          store.books[i].loan = {
+            friend: obj.friend,
+            status: true
+          }
+        }
+      }
+      // store.books[obj.pos].loan.friend = obj.friend
+      // store.books[obj.pos].loan.status = true
     },
     RETURN_BOOK (store, pos) {
       store.books[pos].loan.friend = null
@@ -48,6 +56,7 @@ export default new Vuex.Store({
         response.json().then((data) => {
           commit('GET_BOOKS_DB', data)
           commit('SET_LOADING', false)
+          console.log(data)
         })
       })
       .catch((error) => {
@@ -80,10 +89,12 @@ export default new Vuex.Store({
           title: book.title,
           author: book.author,
           category: book.category,
-          cover: book.cover
+          cover: book.cover,
+          loan: book.loan
         })
         .then((response) => {
           resolve(response)
+          commit('SET_LOADING', false)
         })
         .catch((error) => {
           commit('SET_LOADING', false)
@@ -96,14 +107,16 @@ export default new Vuex.Store({
         commit('SET_LOADING', true)
         axios.put(`${api}/books/loan/${loan.id}`, {
           loan: {
-            status: true,
-            friend: loan.name
+            status: loan.status,
+            friend: loan.friend
           }
         })
         .then((response) => {
           resolve(response)
+          commit('SET_LOADING', false)
         })
         .catch((error) => {
+          commit('SET_LOADING', false)
           reject(error)
         })
       })
