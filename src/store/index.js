@@ -49,12 +49,10 @@ export default new Vuex.Store({
   actions: {
     LOAD_BOOKS_DB ({ commit }) {
       commit('SET_LOADING', true)
-      fetch(`${api}/books`)
+      axios.get(`${api}/books`, {crossdomain: true})
       .then((response) => {
-        response.json().then((data) => {
-          commit('GET_BOOKS_DB', data)
-          commit('SET_LOADING', false)
-        })
+        commit('GET_BOOKS_DB', response.data)
+        commit('SET_LOADING', false)
       })
       .catch((error) => {
         console.error('Falha em carregar os livros: ', error)

@@ -1,3 +1,3 @@
 module.exports = {
-    api: 'http://localhost:3002'
+    api: 'http://my-bucher.openode.io'
 }
